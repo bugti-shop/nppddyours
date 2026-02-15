@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "253659963809",
+    "project_id": "npd-notifications-94684",
+    "storage_bucket": "npd-notifications-94684.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253659963809:android:9bc5c37a92281aa81c2be0",
+        "android_client_info": {
+          "package_name": "nota.npd.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgEWraDZ4Ah6lxWcyYwiPveHqioRsNQIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

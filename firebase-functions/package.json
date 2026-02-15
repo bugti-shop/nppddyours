@@ -1,0 +1,22 @@
+{
+  "name": "npd-fcm-functions",
+  "description": "Firebase Cloud Functions for NPD push notifications",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
