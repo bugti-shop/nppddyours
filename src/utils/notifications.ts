@@ -174,19 +174,25 @@ const scheduleLocalNotification = async (opts: {
 
       const isTaskNotif = opts.extra?.type === 'task';
 
-      const notifPayload = {
+      const notifPayload: any = {
         title: opts.title,
         body: opts.body,
         id: notifId,
         channelId: CHANNEL_ID,
         schedule: { 
-          at: schedDate,
-          allowWhileIdle: true, // Ensures delivery even in Doze mode
+          at: new Date(schedDate.getTime()),
+          allowWhileIdle: true,
         },
-        smallIcon: 'npd_notification_icon',
         extra: opts.extra,
         ...(isTaskNotif ? { actionTypeId: TASK_REMINDER_ACTION_TYPE_ID } : {}),
       };
+
+      // Only set smallIcon if we're confident the resource exists
+      // Missing icon resource causes silent notification failure on Android
+      try {
+        notifPayload.smallIcon = 'ic_stat_notification';
+      } catch {}
+      
 
       console.log('[Notification] Scheduling payload:', JSON.stringify({
         id: notifPayload.id,

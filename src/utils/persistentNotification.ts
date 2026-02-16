@@ -192,11 +192,10 @@ class PersistentNotificationService implements PersistentNotificationManager {
             body: 'Tap to add a note or task quickly',
             channelId: QUICK_ADD_CHANNEL_ID,
             actionTypeId: QUICK_ADD_ACTION_TYPE_ID,
-            ongoing: true, // Makes it persistent (non-dismissible) on Android
+            ongoing: true,
             autoCancel: false,
-            smallIcon: 'npd_notification_icon',
             schedule: {
-              at: new Date(Date.now() + 1000), // 1 second from now
+              at: new Date(Date.now() + 1000),
               allowWhileIdle: true,
             },
             extra: { type: 'quick_add', persistent: 'true' },
