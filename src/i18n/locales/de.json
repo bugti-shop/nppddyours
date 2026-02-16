@@ -798,7 +798,10 @@
     "addTask": "Aufgabe Hinzufügen",
     "addEvent": "Ereignis Hinzufügen",
     "allDay": "Ganztägig",
-    "searchTasks": "Aufgaben suchen"
+    "searchTasks": "Aufgaben suchen",
+    "noNotes": "Keine Notizen für den Tag.",
+    "clickToCreate": "Klicken Sie auf \"+\" um Ihre Notizen zu erstellen.",
+    "clickToCreateTasks": "Klicken Sie auf \"+\" um Ihre Aufgaben zu erstellen."
   },
   "events": {
     "editEvent": "Ereignis Bearbeiten",

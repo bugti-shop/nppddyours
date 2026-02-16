@@ -797,7 +797,10 @@
     "addNew": "Aggiungi Nuovo",
     "addTask": "Aggiungi Attività",
     "allDay": "Tutto il giorno",
-    "searchTasks": "Cerca attività"
+    "searchTasks": "Cerca attività",
+    "noNotes": "Nessuna nota per il giorno.",
+    "clickToCreate": "Clicca su \"+\" per creare le tue note.",
+    "clickToCreateTasks": "Clicca su \"+\" per creare le tue attività."
   },
   "events": {
     "editEvent": "Modifica Evento",

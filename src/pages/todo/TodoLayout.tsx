@@ -87,7 +87,7 @@ export const TodoLayout = ({ children, title, searchValue, onSearchChange }: Tod
           <div className="relative" data-tour="todo-search-bar">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search tasks"
+              placeholder={t('tasks.searchTasks', 'Search tasks')}
               className="pl-10 pr-10 bg-secondary/50 border-none text-sm sm:text-base"
               value={searchValue || ''}
               onChange={(e) => onSearchChange?.(e.target.value)}

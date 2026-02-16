@@ -797,7 +797,10 @@
     "addNew": "Yeni Ekle",
     "addTask": "Görev Ekle",
     "allDay": "Tüm Gün",
-    "searchTasks": "Görev ara"
+    "searchTasks": "Görev ara",
+    "noNotes": "Bugün için not yok.",
+    "clickToCreate": "Notlarınızı oluşturmak için \"+\" düğmesine tıklayın.",
+    "clickToCreateTasks": "Görevlerinizi oluşturmak için \"+\" düğmesine tıklayın."
   },
   "events": {
     "editEvent": "Etkinliği Düzenle",
