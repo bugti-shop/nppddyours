@@ -45,6 +45,31 @@ const getLocalNotifications = async () => {
   }
 };
 
+const CHANNEL_ID = 'npd_reminders';
+let channelCreated = false;
+
+const ensureChannel = async (LN: any) => {
+  if (channelCreated) return;
+  try {
+    await LN.createChannel({
+      id: CHANNEL_ID,
+      name: 'Reminders',
+      description: 'Task and note reminders',
+      importance: 5, // max importance
+      visibility: 1, // public
+      lights: true,
+      vibration: true,
+    });
+    channelCreated = true;
+    console.log('Notification channel created:', CHANNEL_ID);
+  } catch (err) {
+    if (!isNotImplementedError(err)) {
+      console.warn('Failed to create notification channel:', err);
+    }
+    channelCreated = true; // Don't retry on failure
+  }
+};
+
 /**
  * Schedule a local notification
  */
@@ -69,16 +94,24 @@ const scheduleLocalNotification = async (opts: {
         }
       }
 
+      // Ensure notification channel exists (required for Android 8+)
+      await ensureChannel(LN);
+
       await LN.schedule({
         notifications: [{
           title: opts.title,
           body: opts.body,
           id: notifId,
-          schedule: { at: opts.scheduledAt },
-          sound: undefined,
+          channelId: CHANNEL_ID,
+          schedule: { 
+            at: opts.scheduledAt,
+            allowWhileIdle: true, // Ensures delivery even in Doze mode
+          },
+          smallIcon: 'npd_notification_icon',
           extra: opts.extra,
         }],
       });
+      console.log('Native notification scheduled:', notifId, 'at', opts.scheduledAt.toISOString());
       return notifId;
     } catch (err) {
       if (!isNotImplementedError(err)) {
@@ -149,6 +182,9 @@ export class NotificationManager {
       if (LN) {
         const permResult = await LN.requestPermissions();
         this.permissionGranted = permResult.display === 'granted';
+        
+        // Create notification channel (required for Android 8+)
+        await ensureChannel(LN);
 
         // Listen for notification actions
         await LN.addListener('localNotificationActionPerformed', (action) => {
