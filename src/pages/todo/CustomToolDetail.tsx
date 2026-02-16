@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { TodoItem, Folder } from '@/types/note';
+import { useSubscription, FREE_LIMITS } from '@/contexts/SubscriptionContext';
 import { loadTasksFromDB, saveTasksToDB, updateTaskInDB, deleteTaskFromDB } from '@/utils/taskStorage';
 import { TodoLayout } from './TodoLayout';
 import { TaskDateTimePage } from '@/components/TaskDateTimePage';
@@ -55,6 +56,7 @@ const CustomToolDetail = () => {
   const { toolId } = useParams<{ toolId: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { isPro, requireFeature } = useSubscription();
   const [tool, setTool] = useState<CustomTool | null>(null);
   const [linkedTasks, setLinkedTasks] = useState<TodoItem[]>([]);
   const [allTasks, setAllTasks] = useState<TodoItem[]>([]);
@@ -271,6 +273,10 @@ const CustomToolDetail = () => {
   };
 
   const handleCreateFolder = async (name: string, color: string) => {
+    if (!isPro && folders.length >= FREE_LIMITS.maxTaskFolders) {
+      requireFeature('extra_folders');
+      return;
+    }
     const { setSetting } = await import('@/utils/settingsStorage');
     const newFolder: Folder = {
       id: Date.now().toString(),

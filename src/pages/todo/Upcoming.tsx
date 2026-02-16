@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { TodoItem, Priority, Folder, TaskSection } from '@/types/note';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Trash2, Plus, ArrowUpDown, Filter, MousePointer2, Eye, EyeOff, MoreVertical, Copy, FolderInput, Flag, CheckCheck, X, MapPin, Crown } from 'lucide-react';
-import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useSubscription, FREE_LIMITS } from '@/contexts/SubscriptionContext';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { format, isAfter, startOfDay, startOfWeek, endOfWeek, addDays, isTomorrow, isThisWeek } from 'date-fns';
@@ -118,6 +118,10 @@ const Upcoming = () => {
   }, [allItems]);
 
   const handleCreateFolder = async (name: string, color: string) => {
+    if (!isPro && folders.length >= FREE_LIMITS.maxTaskFolders) {
+      requireFeature('extra_folders');
+      return;
+    }
     const { setSetting } = await import('@/utils/settingsStorage');
     const newFolder: Folder = { id: Date.now().toString(), name, color, isDefault: false, createdAt: new Date() };
     const updatedFolders = [...folders, newFolder];

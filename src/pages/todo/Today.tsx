@@ -64,7 +64,7 @@ import { CustomSmartView, loadCustomSmartViews } from '@/utils/customSmartViews'
 import { SaveSmartViewSheet } from '@/components/SaveSmartViewSheet';
 
 import { AutoScheduleSheet } from '@/components/AutoScheduleSheet';
-import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useSubscription, FREE_LIMITS } from '@/contexts/SubscriptionContext';
 import { TASK_CIRCLE, TASK_CHECK_ICON } from '@/utils/taskItemStyles';
 
 type ViewMode = 'flat' | 'kanban' | 'kanban-status' | 'timeline' | 'progress' | 'priority' | 'history';
@@ -332,8 +332,8 @@ const Today = () => {
   }, [items]);
 
   const handleCreateFolder = (name: string, color: string) => {
-    // Free users limited to 1 folder
-    if (!isPro && folders.length >= 1) {
+    // Free users limited to 3 folders
+    if (!isPro && folders.length >= FREE_LIMITS.maxTaskFolders) {
       requireFeature('extra_folders');
       return;
     }
