@@ -1549,6 +1549,8 @@
       "unlimitedEverythingDesc": "무제한 폴더, 섹션 및 뷰",
       "proMember": "Pro 회원",
       "proMemberDesc": "현재 및 향후 모든 기능에 접근",
+      "locationReminders": "위치 기반 알림",
+      "locationRemindersDesc": "주간 및 월간 요금제 전용",
       "weekly": "주간",
       "monthly": "월간",
       "lifetime": "평생",

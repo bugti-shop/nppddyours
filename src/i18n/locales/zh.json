@@ -1524,6 +1524,8 @@
       "unlimitedEverythingDesc": "无限文件夹、分区和视图",
       "proMember": "Pro 会员",
       "proMemberDesc": "获取所有当前和未来功能",
+      "locationReminders": "基于位置的提醒",
+      "locationRemindersDesc": "仅限周付和月付计划专享",
       "weekly": "每周",
       "monthly": "月付",
       "lifetime": "终身",

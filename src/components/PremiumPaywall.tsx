@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Crown, Unlock, Bell, Loader2 } from 'lucide-react';
+import { X, Crown, Unlock, Bell, Loader2, MapPin } from 'lucide-react';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import { Capacitor } from '@capacitor/core';
 import { triggerHaptic } from '@/utils/haptics';
@@ -142,13 +142,22 @@ export const PremiumPaywall = () => {
                <p className="text-muted-foreground text-sm">{t('onboarding.paywall.unlimitedEverythingDesc')}</p>
              </div>
            </div>
-           <div className="flex items-start gap-3 relative">
+           <div className="flex items-start gap-3 mb-6 relative">
              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0">
                <Crown size={16} strokeWidth={2} />
              </div>
              <div>
                <p className="font-semibold">{t('onboarding.paywall.proMember')}</p>
                <p className="text-muted-foreground text-sm">{t('onboarding.paywall.proMemberDesc')}</p>
+             </div>
+           </div>
+           <div className="flex items-start gap-3 relative">
+             <div className="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white z-10 flex-shrink-0">
+               <MapPin size={16} strokeWidth={2} />
+             </div>
+             <div>
+               <p className="font-semibold">{t('onboarding.paywall.locationReminders')}</p>
+               <p className="text-muted-foreground text-sm">{t('onboarding.paywall.locationRemindersDesc')}</p>
              </div>
            </div>
         </div>
