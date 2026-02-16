@@ -48,6 +48,7 @@ const getLocalNotifications = async () => {
 const CHANNEL_ID = 'npd_reminders';
 let channelCreated = false;
 let actionTypesRegistered = false;
+let actionTypesRegistrationSucceeded = false; // true ONLY if registerActionTypes actually succeeded
 
 const ensureChannel = async (LN: any) => {
   if (channelCreated) return;
@@ -83,8 +84,8 @@ const ensureActionTypes = async (LN: any) => {
         {
           id: TASK_REMINDER_ACTION_TYPE_ID,
           actions: [
-            { id: 'complete', title: 'Complete', destructive: false },
-            { id: 'snooze', title: 'Snooze', destructive: false },
+            { id: 'complete', title: '✅ Complete', destructive: false },
+            { id: 'snooze', title: '⏰ Snooze', destructive: false },
           ],
         },
         {
@@ -98,12 +99,14 @@ const ensureActionTypes = async (LN: any) => {
       ],
     });
     actionTypesRegistered = true;
-    console.log('Notification action types registered');
+    actionTypesRegistrationSucceeded = true;
+    console.log('[Notification] ✅ Action types registered successfully');
   } catch (err) {
     if (!isNotImplementedError(err)) {
-      console.warn('Failed to register action types:', err);
+      console.warn('[Notification] ⚠️ Action types registration failed — buttons will be omitted:', err);
     }
     actionTypesRegistered = true;
+    actionTypesRegistrationSucceeded = false; // Explicitly mark as failed
   }
 };
 
@@ -172,6 +175,8 @@ const scheduleLocalNotification = async (opts: {
       // Ensure action types are registered for buttons
       await ensureActionTypes(LN);
 
+      const isTaskNotif = opts.extra?.type === 'task';
+
       const notifPayload: any = {
         title: opts.title,
         body: opts.body,
@@ -182,11 +187,11 @@ const scheduleLocalNotification = async (opts: {
           allowWhileIdle: true,
         },
         extra: opts.extra,
-        // NOTE: actionTypeId removed — on many Android devices, if action types
-        // fail to register (silently), including actionTypeId causes the entire
-        // notification to be silently dropped. Task notifications now fire
-        // without action buttons but reliably. Note notifications already
-        // worked because they never had actionTypeId.
+        // Only include actionTypeId if registration actually succeeded
+        // If it failed, omitting it ensures the notification still fires
+        ...(isTaskNotif && actionTypesRegistrationSucceeded
+          ? { actionTypeId: TASK_REMINDER_ACTION_TYPE_ID }
+          : {}),
       };
       
 
@@ -195,9 +200,22 @@ const scheduleLocalNotification = async (opts: {
         channelId: notifPayload.channelId,
         scheduleAt: schedDate.toISOString(),
         title: notifPayload.title,
+        hasActionTypeId: !!notifPayload.actionTypeId,
       }));
 
-      await LN.schedule({ notifications: [notifPayload] });
+      try {
+        await LN.schedule({ notifications: [notifPayload] });
+      } catch (schedErr) {
+        // If scheduling failed and we had actionTypeId, retry without it
+        if (notifPayload.actionTypeId) {
+          console.warn('[Notification] Schedule failed with actionTypeId, retrying without buttons:', schedErr);
+          delete notifPayload.actionTypeId;
+          actionTypesRegistrationSucceeded = false; // Don't try action buttons again
+          await LN.schedule({ notifications: [notifPayload] });
+        } else {
+          throw schedErr;
+        }
+      }
       
       // Verify it was scheduled
       try {
