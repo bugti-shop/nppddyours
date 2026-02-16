@@ -1563,6 +1563,8 @@
       "unlimitedEverythingDesc": "Carpetas, secciones y vistas ilimitadas",
       "proMember": "Miembro Pro",
       "proMemberDesc": "Accede a todas las funciones actuales y futuras",
+      "locationReminders": "Recordatorios por ubicación",
+      "locationRemindersDesc": "Exclusivo para planes semanal y mensual",
       "weekly": "Semanal",
       "monthly": "Mensual",
       "lifetime": "Vitalicio",

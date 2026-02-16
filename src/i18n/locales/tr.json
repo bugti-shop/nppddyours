@@ -1382,6 +1382,8 @@
       "unlimitedEverythingDesc": "Sınırsız klasör, bölüm ve görünüm",
       "proMember": "Pro Üye",
       "proMemberDesc": "Mevcut ve gelecekteki tüm özelliklere erişin",
+      "locationReminders": "Konuma Dayalı Hatırlatmalar",
+      "locationRemindersDesc": "Yalnızca haftalık ve aylık planlara özel",
       "weekly": "Haftalık",
       "monthly": "Aylık",
       "lifetime": "Ömür Boyu",

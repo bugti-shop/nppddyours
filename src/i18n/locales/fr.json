@@ -1558,6 +1558,8 @@
       "unlimitedEverythingDesc": "Dossiers, sections et vues illimités",
       "proMember": "Membre Pro",
       "proMemberDesc": "Accédez à toutes les fonctionnalités actuelles et futures",
+      "locationReminders": "Rappels basés sur la localisation",
+      "locationRemindersDesc": "Exclusif aux abonnements hebdomadaire et mensuel",
       "weekly": "Hebdomadaire",
       "monthly": "Mensuel",
       "lifetime": "À vie",
