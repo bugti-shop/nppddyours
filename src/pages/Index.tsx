@@ -885,60 +885,7 @@ const Index = () => {
       <main className="container mx-auto px-2 xs:px-3 sm:px-4 py-2 xs:py-3">
         <PersonalizedTips />
 
-        {/* Upcoming Reminders Section */}
-        {upcomingReminders.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Bell className="h-5 w-5 text-primary" />
-                {t('notes.upcomingReminders')}
-              </h2>
-            </div>
-            <div className="space-y-2">
-              {upcomingReminders.map((reminder) => (
-                <Card
-                  key={reminder.id}
-                  className="cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => {
-                    const note = notes.find(n => n.id === reminder.noteId);
-                    if (note) handleEditNote(note);
-                  }}
-                >
-                  <CardContent className="p-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-sm truncate mb-1">
-                          {reminder.title}
-                        </h3>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <Badge variant="outline" className="gap-1 text-xs">
-                            <Clock className="h-3 w-3" />
-                            {isToday(reminder.schedule)
-                              ? `${t('common.today')} ${format(reminder.schedule, 'h:mm a')}`
-                              : isTomorrow(reminder.schedule)
-                              ? `${t('common.tomorrow')} ${format(reminder.schedule, 'h:mm a')}`
-                              : format(reminder.schedule, 'MMM dd, h:mm a')}
-                          </Badge>
-                          {reminder.recurring && reminder.recurring !== 'none' && (
-                            <Badge variant="secondary" className="gap-1 text-xs">
-                              <Repeat className="h-3 w-3" />
-                              {reminder.recurring}
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                      {reminder.note && (
-                        <Badge className="capitalize text-xs">
-                          {reminder.note.type}
-                        </Badge>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Upcoming Reminders Section - hidden from home UI, functionality preserved */}
 
         <FolderManager
           data-tour="folders-section"
