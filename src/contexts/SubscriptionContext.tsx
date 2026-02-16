@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { getSetting, setSetting } from '@/utils/settingsStorage';
 import { getStoredGoogleUser } from '@/utils/googleAuth';
 import { Capacitor } from '@capacitor/core';
@@ -29,6 +29,7 @@ const PRODUCT_IDS = {
 
 export type ProductType = keyof typeof PRODUCT_IDS;
 export type SubscriptionTier = 'free' | 'premium';
+export type SubscriptionPlanType = 'none' | 'weekly' | 'monthly' | 'lifetime';
 
 // All premium features list
 export const PREMIUM_FEATURES = [
@@ -40,7 +41,7 @@ export const PREMIUM_FEATURES = [
   'tasks_settings',
   'quick_add',
   'multiple_tasks',
-  
+  'location_reminders',
   'task_status',
   'view_mode_status_board',
   'view_mode_timeline',
@@ -60,6 +61,11 @@ export const PREMIUM_FEATURES = [
   'customize_navigation',
 ] as const;
 
+// Features that require a recurring (weekly/monthly) subscription — NOT available on lifetime
+export const RECURRING_ONLY_FEATURES: readonly PremiumFeature[] = [
+  'location_reminders',
+] as const;
+
 export type PremiumFeature = typeof PREMIUM_FEATURES[number];
 
 // Free limits
@@ -73,7 +79,9 @@ export const FREE_LIMITS = {
 interface UnifiedBillingContextType {
   // Subscription state
   tier: SubscriptionTier;
+  planType: SubscriptionPlanType;
   isPro: boolean;
+  isRecurringSubscriber: boolean;
   isLoading: boolean;
   
   // Feature gating
@@ -395,18 +403,45 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const tier: SubscriptionTier = isPro ? 'premium' : 'free';
   const isLoading = localLoading || rcLoading || (Capacitor.isNativePlatform() && !isInitialized);
 
+  // Detect plan type from RevenueCat entitlement
+  const planType: SubscriptionPlanType = useMemo(() => {
+    if (!isPro) return 'none';
+    if (!customerInfo) return 'none';
+    const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
+    if (!entitlement) return 'none';
+    const productId = entitlement.productIdentifier || '';
+    if (productId === PRODUCT_IDS.weekly || productId.includes('wk')) return 'weekly';
+    if (productId === PRODUCT_IDS.monthly || productId.includes('month')) return 'monthly';
+    if (productId === PRODUCT_IDS.lifetime || productId.includes('lv') || productId.includes('lifetime')) return 'lifetime';
+    // Admin bypass defaults to weekly-equivalent (full access)
+    if (localProAccess) return 'weekly';
+    return 'none';
+  }, [isPro, customerInfo, localProAccess]);
+
+  const isRecurringSubscriber = planType === 'weekly' || planType === 'monthly';
+
   // ==================== Feature Gating ====================
 
   const canUseFeature = useCallback((feature: PremiumFeature): boolean => {
-    return isPro;
-  }, [isPro]);
+    if (!isPro) return false;
+    if ((RECURRING_ONLY_FEATURES as readonly string[]).includes(feature)) {
+      return isRecurringSubscriber;
+    }
+    return true;
+  }, [isPro, isRecurringSubscriber]);
 
   const requireFeature = useCallback((feature: PremiumFeature): boolean => {
+    if ((RECURRING_ONLY_FEATURES as readonly string[]).includes(feature)) {
+      if (isRecurringSubscriber) return true;
+      setPaywallFeature(feature);
+      setShowPaywall(true);
+      return false;
+    }
     if (isPro) return true;
     setPaywallFeature(feature);
     setShowPaywall(true);
     return false;
-  }, [isPro]);
+  }, [isPro, isRecurringSubscriber]);
 
   const openPaywall = useCallback((feature?: string) => {
     setPaywallFeature(feature || null);
@@ -430,7 +465,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       value={{
         // Subscription
         tier,
+        planType,
         isPro,
+        isRecurringSubscriber,
         isLoading,
         // Feature gating
         showPaywall,

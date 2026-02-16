@@ -94,7 +94,7 @@ export const TaskDetailPage = ({
 }: TaskDetailPageProps) => {
   const { t } = useTranslation();
   const { getPriorityColor: getPriorityHex, getPriorityName } = usePriorities();
-  const { requireFeature, isPro } = useSubscription();
+  const { requireFeature, isPro, isRecurringSubscriber } = useSubscription();
   const [title, setTitle] = useState('');
   const [newSubtaskText, setNewSubtaskText] = useState('');
   const [showSubtaskInput, setShowSubtaskInput] = useState(false);
@@ -1215,9 +1215,9 @@ export const TaskDetailPage = ({
             <span className="flex-1 text-left">{t('taskDetail.convertToNotes')}</span>
           </button>
 
-          {/* Location Reminder */}
+          {/* Location Reminder - Weekly/Monthly Only */}
           <button 
-            onClick={() => setShowLocationReminder(true)}
+            onClick={() => { if (!requireFeature('location_reminders')) return; setShowLocationReminder(true); }}
             className={cn(
               "w-full flex items-center gap-3 py-3 hover:bg-muted/50 rounded-lg px-2 transition-colors",
               task.locationReminder?.enabled && "bg-accent-pink/10"
@@ -1225,6 +1225,7 @@ export const TaskDetailPage = ({
           >
             <MapPin className={cn("h-5 w-5", task.locationReminder?.enabled ? "text-accent-pink" : "text-muted-foreground")} />
             <span className="flex-1 text-left">{t('taskDetail.locationReminder')}</span>
+            {!isRecurringSubscriber && <Crown className="h-3.5 w-3.5 mr-1" style={{ color: '#3c78f0' }} />}
             {task.locationReminder?.enabled && (
               <span className="text-xs text-accent-pink">{task.locationReminder.address?.split(',')[0]}</span>
             )}
