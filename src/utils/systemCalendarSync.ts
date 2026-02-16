@@ -287,59 +287,82 @@ export const performFullCalendarSync = async (
 
   if (!isNative()) return result;
 
-  const enabled = await isCalendarSyncEnabled();
-  if (!enabled) return result;
+  try {
+    const enabled = await isCalendarSyncEnabled();
+    if (!enabled) return result;
 
-  const hasPermission = await checkCalendarPermissions();
-  if (!hasPermission) {
-    result.errors.push('Calendar permissions not granted');
-    return result;
-  }
+    const hasPermission = await checkCalendarPermissions();
+    if (!hasPermission) {
+      result.errors.push('Calendar permissions not granted');
+      return result;
+    }
 
-  // ── Push tasks with due dates ──
-  const tasksWithDates = tasks.filter(t => t.dueDate && !t.completed);
-  for (const task of tasksWithDates) {
+    // ── Push tasks with due dates ──
+    const tasksWithDates = (tasks || []).filter(t => t?.dueDate && !t?.completed);
+    for (const task of tasksWithDates) {
+      try {
+        await pushTaskToNativeCalendar(task);
+        result.pushed++;
+      } catch (e: any) {
+        const msg = e?.message || String(e);
+        if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
+          result.errors.push(`Task "${task.text}": ${msg}`);
+        }
+      }
+    }
+
+    // ── Push app calendar events ──
+    for (const event of (appEvents || [])) {
+      try {
+        await pushEventToNativeCalendar(event);
+        result.pushed++;
+      } catch (e: any) {
+        const msg = e?.message || String(e);
+        if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
+          result.errors.push(`Event "${event.title}": ${msg}`);
+        }
+      }
+    }
+
+    // ── Pull from native calendar ──
     try {
-      await pushTaskToNativeCalendar(task);
-      result.pushed++;
-    } catch (e: any) {
-      result.errors.push(`Task "${task.text}": ${e.message}`);
+      const pulledEvents = await pullFromNativeCalendar();
+      const existingAppEvents = await getSetting<AppCalendarEvent[]>('calendarEvents', []);
+      const existingIds = new Set(existingAppEvents.map(e => e.id));
+
+      const newEvents = pulledEvents.filter(e => !existingIds.has(e.id));
+      if (newEvents.length > 0) {
+        const merged = [...existingAppEvents, ...newEvents];
+        await setSetting('calendarEvents', merged);
+        result.pulled = newEvents.length;
+        window.dispatchEvent(new CustomEvent('calendarEventsUpdated'));
+      }
+    } catch (pullErr) {
+      const msg = String(pullErr);
+      if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
+        result.errors.push(`Pull failed: ${msg}`);
+      }
+    }
+
+    // ── Save sync status ──
+    try {
+      const syncMap = await loadSyncMap();
+      await saveSyncStatus({
+        lastSyncedAt: new Date().toISOString(),
+        pushed: result.pushed,
+        pulled: result.pulled,
+        totalSynced: Object.keys(syncMap).length,
+        errors: result.errors,
+      });
+    } catch {
+      // Don't fail the whole sync for status save errors
+    }
+  } catch (outerErr) {
+    const msg = String(outerErr);
+    if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
+      result.errors.push(`Sync error: ${msg}`);
     }
   }
-
-  // ── Push app calendar events ──
-  for (const event of appEvents) {
-    try {
-      await pushEventToNativeCalendar(event);
-      result.pushed++;
-    } catch (e: any) {
-      result.errors.push(`Event "${event.title}": ${e.message}`);
-    }
-  }
-
-  // ── Pull from native calendar ──
-  const pulledEvents = await pullFromNativeCalendar();
-  const existingAppEvents = await getSetting<AppCalendarEvent[]>('calendarEvents', []);
-  const existingIds = new Set(existingAppEvents.map(e => e.id));
-
-  const newEvents = pulledEvents.filter(e => !existingIds.has(e.id));
-  if (newEvents.length > 0) {
-    const merged = [...existingAppEvents, ...newEvents];
-    await setSetting('calendarEvents', merged);
-    result.pulled = newEvents.length;
-    // Notify UI
-    window.dispatchEvent(new CustomEvent('calendarEventsUpdated'));
-  }
-
-  // ── Save sync status ──
-  const syncMap = await loadSyncMap();
-  await saveSyncStatus({
-    lastSyncedAt: new Date().toISOString(),
-    pushed: result.pushed,
-    pulled: result.pulled,
-    totalSynced: Object.keys(syncMap).length,
-    errors: result.errors,
-  });
 
   return result;
 };
