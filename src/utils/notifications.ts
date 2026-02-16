@@ -119,14 +119,40 @@ const scheduleLocalNotification = async (opts: {
 }): Promise<number> => {
   const notifId = opts.id || Math.floor(Math.random() * 100000);
   
+  console.log('[Notification] scheduleLocalNotification called:', {
+    title: opts.title,
+    body: opts.body,
+    scheduledAt: opts.scheduledAt?.toISOString?.() || String(opts.scheduledAt),
+    now: new Date().toISOString(),
+    diffMs: opts.scheduledAt ? opts.scheduledAt.getTime() - Date.now() : 'N/A',
+    isNative: Capacitor.isNativePlatform(),
+  });
+
+  // Ensure scheduledAt is a valid future Date
+  const schedDate = new Date(opts.scheduledAt);
+  if (isNaN(schedDate.getTime())) {
+    console.error('[Notification] Invalid scheduledAt date:', opts.scheduledAt);
+    return notifId;
+  }
+
+  // If the scheduled time is in the past, skip
+  if (schedDate.getTime() <= Date.now()) {
+    console.warn('[Notification] Scheduled time is in the past, skipping:', schedDate.toISOString());
+    return notifId;
+  }
+
   const LN = await getLocalNotifications();
+  console.log('[Notification] LocalNotifications plugin:', LN ? 'available' : 'NOT available');
+  
   if (LN) {
     try {
       const permResult = await LN.checkPermissions();
+      console.log('[Notification] Permission status:', permResult.display);
       if (permResult.display !== 'granted') {
         const reqResult = await LN.requestPermissions();
+        console.log('[Notification] Permission request result:', reqResult.display);
         if (reqResult.display !== 'granted') {
-          console.warn('Local notification permission denied');
+          console.warn('[Notification] Permission denied — cannot schedule');
           return notifId;
         }
       }
@@ -139,24 +165,41 @@ const scheduleLocalNotification = async (opts: {
 
       const isTaskNotif = opts.extra?.type === 'task';
 
-      await LN.schedule({
-        notifications: [{
-          title: opts.title,
-          body: opts.body,
-          id: notifId,
-          channelId: CHANNEL_ID,
-          schedule: { 
-            at: opts.scheduledAt,
-            allowWhileIdle: true, // Ensures delivery even in Doze mode
-          },
-          smallIcon: 'npd_notification_icon',
-          extra: opts.extra,
-          ...(isTaskNotif ? { actionTypeId: TASK_REMINDER_ACTION_TYPE_ID } : {}),
-        }],
-      });
-      console.log('Native notification scheduled:', notifId, 'at', opts.scheduledAt.toISOString());
+      const notifPayload = {
+        title: opts.title,
+        body: opts.body,
+        id: notifId,
+        channelId: CHANNEL_ID,
+        schedule: { 
+          at: schedDate,
+          allowWhileIdle: true, // Ensures delivery even in Doze mode
+        },
+        smallIcon: 'npd_notification_icon',
+        extra: opts.extra,
+        ...(isTaskNotif ? { actionTypeId: TASK_REMINDER_ACTION_TYPE_ID } : {}),
+      };
+
+      console.log('[Notification] Scheduling payload:', JSON.stringify({
+        id: notifPayload.id,
+        channelId: notifPayload.channelId,
+        scheduleAt: schedDate.toISOString(),
+        title: notifPayload.title,
+      }));
+
+      await LN.schedule({ notifications: [notifPayload] });
+      
+      // Verify it was scheduled
+      try {
+        const pending = await LN.getPending();
+        const found = pending.notifications.find((n: any) => n.id === notifId);
+        console.log('[Notification] ✅ Scheduled successfully. Pending count:', pending.notifications.length, 'Found our notif:', !!found);
+      } catch (verifyErr) {
+        console.log('[Notification] Could not verify pending:', verifyErr);
+      }
+
       return notifId;
     } catch (err) {
+      console.error('[Notification] ❌ Schedule FAILED:', err);
       if (!isNotImplementedError(err)) {
         console.warn('Local notification schedule failed, using web fallback:', err);
       }
@@ -349,19 +392,30 @@ export class NotificationManager {
     repeatSettings?: RepeatSettings
   ): Promise<number[]> {
     const scheduledAt = task.reminderTime || task.dueDate;
+    console.log('[scheduleTaskReminder] Called for task:', task.text, {
+      reminderTime: task.reminderTime,
+      dueDate: task.dueDate,
+      scheduledAt,
+      reminderOffset,
+      taskId: task.id,
+    });
+
     if (!scheduledAt) {
-      console.log('No reminder time set for task:', task.text);
+      console.log('[scheduleTaskReminder] No reminder time set — skipping');
       return [];
     }
+
+    const schedDate = new Date(scheduledAt);
+    console.log('[scheduleTaskReminder] Parsed schedule date:', schedDate.toISOString(), 'Now:', new Date().toISOString());
 
     const notifId = await scheduleLocalNotification({
       title: '⏰ Task Reminder',
       body: task.text,
-      scheduledAt: new Date(scheduledAt),
+      scheduledAt: schedDate,
       extra: { taskId: task.id, type: 'task', priority: task.priority || 'medium' },
     });
 
-    console.log('Task reminder scheduled:', task.text, notifId);
+    console.log('[scheduleTaskReminder] ✅ Scheduled notification ID:', notifId);
     return [notifId];
   }
 
