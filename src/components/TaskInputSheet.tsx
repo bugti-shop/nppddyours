@@ -40,7 +40,8 @@ import {
   LayoutTemplate,
   Paperclip,
   File,
-  Trash2
+  Trash2,
+  Crown
 } from 'lucide-react';
 import { EditActionsSheet, ActionItem, defaultActions } from './EditActionsSheet';
 import { WaveformVisualizer } from './WaveformVisualizer';
@@ -1563,6 +1564,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                         <span className={cn("text-sm whitespace-nowrap", (location || locationReminder?.enabled) ? "text-pink-600 dark:text-pink-400" : "text-muted-foreground")}>
                           {locationReminder?.enabled ? t('taskInput.locationReminder') : location ? t('taskInput.hasLocation') : t('taskInput.location')}
                         </span>
+                        <Crown className="h-3 w-3 text-amber-500 flex-shrink-0" />
                       </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-80 p-3 bg-popover z-[100]" align="start">
