@@ -278,6 +278,41 @@ export const pullFromNativeCalendar = async (
   }
 };
 
+// ─── Yield to UI thread to prevent freezing ─────────────────────
+const yieldToUI = () => new Promise(resolve => setTimeout(resolve, 0));
+
+// ─── Batch processing helper ────────────────────────────────────
+const BATCH_SIZE = 25;
+
+const processBatch = async <T>(
+  items: T[],
+  processor: (item: T) => Promise<void>,
+): Promise<{ processed: number; errors: string[] }> => {
+  let processed = 0;
+  const errors: string[] = [];
+
+  for (let i = 0; i < items.length; i += BATCH_SIZE) {
+    const batch = items.slice(i, i + BATCH_SIZE);
+    
+    for (const item of batch) {
+      try {
+        await processor(item);
+        processed++;
+      } catch (e: any) {
+        const msg = e?.message || String(e);
+        if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
+          errors.push(msg);
+        }
+      }
+    }
+
+    // Yield to UI thread between batches to keep app responsive
+    await yieldToUI();
+  }
+
+  return { processed, errors };
+};
+
 // ─── Full bidirectional sync ─────────────────────────────────────
 export const performFullCalendarSync = async (
   tasks: TodoItem[],
@@ -297,32 +332,20 @@ export const performFullCalendarSync = async (
       return result;
     }
 
-    // ── Push tasks with due dates ──
+    // ── Push tasks with due dates (batched) ──
     const tasksWithDates = (tasks || []).filter(t => t?.dueDate && !t?.completed);
-    for (const task of tasksWithDates) {
-      try {
-        await pushTaskToNativeCalendar(task);
-        result.pushed++;
-      } catch (e: any) {
-        const msg = e?.message || String(e);
-        if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
-          result.errors.push(`Task "${task.text}": ${msg}`);
-        }
-      }
-    }
+    const taskResult = await processBatch(tasksWithDates, async (task) => {
+      await pushTaskToNativeCalendar(task);
+    });
+    result.pushed += taskResult.processed;
+    result.errors.push(...taskResult.errors.map(e => `Task push: ${e}`));
 
-    // ── Push app calendar events ──
-    for (const event of (appEvents || [])) {
-      try {
-        await pushEventToNativeCalendar(event);
-        result.pushed++;
-      } catch (e: any) {
-        const msg = e?.message || String(e);
-        if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
-          result.errors.push(`Event "${event.title}": ${msg}`);
-        }
-      }
-    }
+    // ── Push app calendar events (batched) ──
+    const eventResult = await processBatch(appEvents || [], async (event) => {
+      await pushEventToNativeCalendar(event);
+    });
+    result.pushed += eventResult.processed;
+    result.errors.push(...eventResult.errors.map(e => `Event push: ${e}`));
 
     // ── Pull from native calendar ──
     try {
@@ -354,9 +377,7 @@ export const performFullCalendarSync = async (
         totalSynced: Object.keys(syncMap).length,
         errors: result.errors,
       });
-    } catch {
-      // Don't fail the whole sync for status save errors
-    }
+    } catch {}
   } catch (outerErr) {
     const msg = String(outerErr);
     if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
