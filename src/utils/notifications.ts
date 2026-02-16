@@ -172,8 +172,6 @@ const scheduleLocalNotification = async (opts: {
       // Ensure action types are registered for buttons
       await ensureActionTypes(LN);
 
-      const isTaskNotif = opts.extra?.type === 'task';
-
       const notifPayload: any = {
         title: opts.title,
         body: opts.body,
@@ -184,14 +182,12 @@ const scheduleLocalNotification = async (opts: {
           allowWhileIdle: true,
         },
         extra: opts.extra,
-        ...(isTaskNotif ? { actionTypeId: TASK_REMINDER_ACTION_TYPE_ID } : {}),
+        // NOTE: actionTypeId removed — on many Android devices, if action types
+        // fail to register (silently), including actionTypeId causes the entire
+        // notification to be silently dropped. Task notifications now fire
+        // without action buttons but reliably. Note notifications already
+        // worked because they never had actionTypeId.
       };
-
-      // Only set smallIcon if we're confident the resource exists
-      // Missing icon resource causes silent notification failure on Android
-      try {
-        notifPayload.smallIcon = 'ic_stat_notification';
-      } catch {}
       
 
       console.log('[Notification] Scheduling payload:', JSON.stringify({

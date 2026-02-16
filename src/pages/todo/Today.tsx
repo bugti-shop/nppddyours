@@ -386,14 +386,14 @@ const Today = () => {
     const newItem: TodoItem = { 
       id: Date.now().toString(), 
       completed: false, 
-      sectionId: inputSectionId || defaultSectionId || sections[0]?.id,
+      ...task, // Spread FIRST so our overrides below take priority
+      sectionId: task.sectionId || inputSectionId || defaultSectionId || sections[0]?.id,
       dueDate: task.dueDate || new Date(), // Default to current date if no date specified
       createdAt: now,
       modifiedAt: now,
-      status: 'not_started', // Default status
+      status: task.status || 'not_started', // Default status
       // Default reminder to "instant" if task has date/time but no reminder set
       reminderTime: (task.dueDate && !task.reminderTime) ? task.dueDate : task.reminderTime,
-      ...task 
     };
 
     // Add task to state FIRST (non-blocking) so UI updates immediately
