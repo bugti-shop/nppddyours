@@ -15,15 +15,8 @@ import { GoogleAuthProvider } from "@/contexts/GoogleAuthContext";
 import { PremiumPaywall } from "@/components/PremiumPaywall";
 import { NavigationLoader } from "@/components/NavigationLoader";
 import { SyncConflictSheet } from "@/components/SyncConflictSheet";
-import { PersistentNotificationHandler } from "@/components/PersistentNotificationHandler";
-import { InAppReminderChecker } from "@/components/InAppReminderChecker";
-import { NotificationActionsHandler } from "@/components/NotificationActionsHandler";
-import { NotificationPermissionRequest } from "@/components/NotificationPermissionRequest";
 import { NavigationBackProvider } from "@/components/NavigationBackProvider";
-import { notificationManager } from "@/utils/notifications";
-import { persistentNotificationManager } from "@/utils/persistentNotification";
 import { widgetDataSync } from "@/utils/widgetDataSync";
-import { initializeGamificationNotifications } from "@/utils/gamificationNotifications";
 import { getSetting, setSetting } from "@/utils/settingsStorage";
 import { shouldAppBeLocked, updateLastUnlockTime } from "@/utils/appLockStorage";
 import { AppLockScreen } from "@/components/AppLockScreen";
@@ -155,8 +148,6 @@ const AppRoutes = () => {
         <NavigationLoader />
         <DashboardTracker />
         <TourNavigationListener />
-        <PersistentNotificationHandler />
-        <NotificationActionsHandler />
         <Suspense fallback={<EmptyFallback />}>
           <Routes>
             <Route path="/" element={<RootRedirect />} />
@@ -193,10 +184,7 @@ const AppContent = () => {
   useSystemCalendarSync();
 
   useEffect(() => {
-    notificationManager.initialize().catch(console.error);
-    persistentNotificationManager.initialize().catch(console.error);
     widgetDataSync.initialize().catch(console.error);
-    initializeGamificationNotifications().catch(console.error);
     
     // Check app lock status
     const checkLock = async () => {
@@ -233,8 +221,6 @@ const AppContent = () => {
     <>
       <Toaster />
       <Sonner />
-      <NotificationPermissionRequest />
-      <InAppReminderChecker />
       <SyncConflictSheet />
       <PremiumPaywall />
       <WhatsNewSheet />

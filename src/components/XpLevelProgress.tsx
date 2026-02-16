@@ -5,7 +5,7 @@ import { Star, Sparkles, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { loadXpData, XpData, getLevelTitle } from '@/utils/gamificationStorage';
 import { playLevelUpSound } from '@/utils/gamificationSounds';
-import { showLevelUpNotification } from '@/utils/gamificationNotifications';
+
 import Confetti from 'react-confetti';
 
 interface XpLevelProgressProps {
@@ -47,8 +47,7 @@ export const XpLevelProgress = ({ compact = false }: XpLevelProgressProps) => {
       // Play sound effect
       playLevelUpSound();
       
-      // Show push notification
-      showLevelUpNotification(level, title);
+      // Level up!
       
       setTimeout(() => {
         setShowLevelUp(false);

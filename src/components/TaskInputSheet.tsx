@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { notificationManager } from '@/utils/notifications';
+
 import { toast } from 'sonner';
 import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
 import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';

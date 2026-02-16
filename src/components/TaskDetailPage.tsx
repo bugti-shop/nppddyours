@@ -52,7 +52,7 @@ import { Play, Pause } from 'lucide-react';
 import { TaskDateTimePage, RepeatSettings } from './TaskDateTimePage';
 import { TaskTimeTracker } from './TaskTimeTracker';
 import { TaskDependencySheet, canCompleteTask } from './TaskDependencySheet';
-import { notificationManager } from '@/utils/notifications';
+
 import { ResolvedTaskImage } from './ResolvedTaskImage';
 import { resolveTaskMediaUrl } from '@/utils/todoItemsStorage';
 import { TaskInputSheet } from './TaskInputSheet';
@@ -369,18 +369,7 @@ export const TaskDetailPage = ({
     setShowDateTimePage(false);
     toast.success(data.selectedDate ? t('taskDetailToasts.dateTimeReminderSaved') : t('taskDetailToasts.dateSaved'));
 
-    // Schedule notification in background (non-blocking)
-    notificationManager.scheduleTaskReminder(
-      updatedTask,
-      data.reminder,
-      data.repeatSettings
-    ).then(notificationIds => {
-      if (notificationIds.length > 0) {
-        onUpdate({ ...updatedTask, notificationIds });
-      }
-    }).catch(error => {
-      console.error('Error scheduling notification:', error);
-    });
+    // Notification scheduling removed
   };
 
   const handleConvertToNote = () => {

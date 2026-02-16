@@ -6,7 +6,6 @@
 
 import { loadTodoItems, saveTodoItems } from './todoItemsStorage';
 import { processTaskRollovers } from './taskRollover';
-import { notificationManager } from './notifications';
 import { checkDeadlineEscalations } from './deadlineEscalation';
 
 // Rollover check interval (1 hour in milliseconds)
@@ -28,7 +27,6 @@ export const checkAndRolloverTasks = async (): Promise<number> => {
     
     if (rolledOverCount > 0) {
       await saveTodoItems(updatedTasks);
-      await notificationManager.rescheduleAllTasks(updatedTasks);
       console.log(`Auto-rolled over ${rolledOverCount} recurring task(s)`);
     }
     

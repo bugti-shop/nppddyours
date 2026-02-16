@@ -22,7 +22,7 @@ import { LocationRemindersMap } from '@/components/LocationRemindersMap';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { notificationManager } from '@/utils/notifications';
+
 import { createNextRecurringTask } from '@/utils/recurringTasks';
 import { archiveCompletedTasks } from '@/utils/taskCleanup';
 import { getCategoryById } from '@/utils/categories';
@@ -137,10 +137,7 @@ const Upcoming = () => {
     await saveTodoItems(updatedAllItems);
     loadItems();
     
-    // Fire-and-forget notification scheduling
-    if (newItem.dueDate || newItem.reminderTime) {
-      notificationManager.scheduleTaskReminder(newItem).catch(error => console.error('Failed to schedule notification:', error));
-    }
+    // Notification scheduling removed
   };
 
   const updateItem = async (itemId: string, updates: Partial<TodoItem>) => {
@@ -188,16 +185,12 @@ const Upcoming = () => {
     const updatedAllItems = allItems.map((item) => (item.id === itemId ? { ...item, ...updates } : item));
     setAllItems(updatedAllItems);
     
-    const updatedItem = updatedAllItems.find(i => i.id === itemId);
-    if (updatedItem && (updatedItem.dueDate || updatedItem.reminderTime)) {
-      try { await notificationManager.scheduleTaskReminder(updatedItem); } catch {}
-    }
+    
     
     loadItems();
   };
 
   const deleteItem = async (itemId: string) => {
-    await notificationManager.cancelTaskReminder(itemId);
     const updatedAllItems = allItems.filter((item: TodoItem) => item.id !== itemId);
     setAllItems(updatedAllItems);
     await saveTodoItems(updatedAllItems);

@@ -7,16 +7,7 @@ const config: CapacitorConfig = {
   server: {
     cleartext: true
   },
-  plugins: {
-    LocalNotifications: {
-      smallIcon: "npd_notification_icon",
-      iconColor: "#3B82F6",
-      sound: "beep.wav",
-    },
-    PushNotifications: {
-      presentationOptions: ["badge", "sound", "alert"],
-    },
-  },
+  plugins: {},
   android: {
     allowMixedContent: true,
     webContentsDebuggingEnabled: true,

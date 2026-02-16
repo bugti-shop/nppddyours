@@ -35,7 +35,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
 import { format } from 'date-fns';
-import { scheduleNoteReminder, updateNoteReminder, cancelNoteReminder } from '@/utils/noteNotifications';
+
 import { saveNoteVersion } from '@/utils/noteVersionHistory';
 import { exportNoteToMarkdown } from '@/utils/markdownExport';
 import { insertNoteLink, findBacklinks } from '@/utils/noteLinking';
@@ -477,34 +477,7 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave, defaultType = 'regul
     const savedNote = buildCurrentNote();
 
     if (full) {
-      // Handle notification scheduling
-      if (savedNote.reminderEnabled && savedNote.reminderTime) {
-        const result = await updateNoteReminder({
-          ...savedNote,
-          notificationId: savedNote.notificationId || undefined,
-          notificationIds: savedNote.notificationIds || undefined,
-        });
-
-        if (result) {
-          if (Array.isArray(result)) {
-            savedNote.notificationIds = result;
-            savedNote.notificationId = undefined;
-          } else {
-            savedNote.notificationId = result;
-            savedNote.notificationIds = undefined;
-          }
-        }
-      } else if (!savedNote.reminderEnabled && (savedNote.notificationId || savedNote.notificationIds)) {
-        // Cancel notification(s) if reminder was disabled
-        if (savedNote.notificationIds) {
-          await cancelNoteReminder(savedNote.notificationIds);
-        } else if (savedNote.notificationId) {
-          await cancelNoteReminder(savedNote.notificationId);
-        }
-        savedNote.notificationId = undefined;
-        savedNote.notificationIds = undefined;
-        savedNote.reminderTime = undefined;
-      }
+      // Notification scheduling removed
 
       // Save version history (only on "full" save)
       saveNoteVersion(savedNote, note ? 'edit' : 'create');
