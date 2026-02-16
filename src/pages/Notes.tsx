@@ -12,7 +12,7 @@ import { exportNoteToDocx } from '@/utils/exportToDocx';
 import { exportNoteToMarkdown } from '@/utils/markdownExport';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import appLogo from '@/assets/app-logo.png';
+import { useRetentionLogo } from '@/hooks/useRetentionLogo';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { useTranslation } from 'react-i18next';
@@ -62,6 +62,7 @@ const Notes = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { logo: appLogo } = useRetentionLogo();
   const { requireFeature, openPaywall, isPro } = useSubscription();
   
   // Use global notes context - no more local loading!
