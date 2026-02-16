@@ -16,6 +16,7 @@ import { PremiumPaywall } from "@/components/PremiumPaywall";
 import { NavigationLoader } from "@/components/NavigationLoader";
 import { SyncConflictSheet } from "@/components/SyncConflictSheet";
 import { PersistentNotificationHandler } from "@/components/PersistentNotificationHandler";
+import { InAppReminderChecker } from "@/components/InAppReminderChecker";
 import { NotificationActionsHandler } from "@/components/NotificationActionsHandler";
 import { NavigationBackProvider } from "@/components/NavigationBackProvider";
 import { notificationManager } from "@/utils/notifications";
@@ -155,6 +156,7 @@ const AppRoutes = () => {
         <TourNavigationListener />
         <PersistentNotificationHandler />
         <NotificationActionsHandler />
+        <InAppReminderChecker />
         <Suspense fallback={<EmptyFallback />}>
           <Routes>
             <Route path="/" element={<RootRedirect />} />
