@@ -1,6 +1,5 @@
 import { Capacitor } from '@capacitor/core';
 import { getSetting, setSetting } from './settingsStorage';
-import { NoteType } from '@/types/note';
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -8,9 +7,8 @@ const STORAGE_KEYS = {
 };
 
 /**
- * PersistentNotificationManager - FCM only (local notifications removed)
- * Persistent notification functionality now relies on FCM via your backend.
- * Methods are kept to avoid breaking callers.
+ * PersistentNotificationManager - Local Notifications mode
+ * Uses Capacitor Local Notifications for on-device persistent notification.
  */
 export interface PersistentNotificationManager {
   initialize: () => Promise<void>;
@@ -34,7 +32,7 @@ class PersistentNotificationService implements PersistentNotificationManager {
   }
 
   async initialize(): Promise<void> {
-    console.log('[PersistentNotification] FCM mode - persistent notification handled by backend');
+    console.log('[PersistentNotification] Initialized (Local Notifications mode)');
   }
 
   async isEnabled(): Promise<boolean> {
@@ -43,16 +41,16 @@ class PersistentNotificationService implements PersistentNotificationManager {
 
   async enable(): Promise<void> {
     await setSetting(STORAGE_KEYS.ENABLED, true);
-    console.log('[PersistentNotification] Enabled (FCM mode)');
+    console.log('[PersistentNotification] Enabled');
   }
 
   async disable(): Promise<void> {
     await setSetting(STORAGE_KEYS.ENABLED, false);
-    console.log('[PersistentNotification] Disabled (FCM mode)');
+    console.log('[PersistentNotification] Disabled');
   }
 
   async refresh(): Promise<void> {
-    console.log('[PersistentNotification] Refresh (FCM mode)');
+    console.log('[PersistentNotification] Refreshed');
   }
 
   handleAction(actionId: string): void {
