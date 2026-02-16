@@ -4,6 +4,7 @@ import { performFullCalendarSync, isCalendarSyncEnabled, initializeCalendarSync 
 import { loadTasksFromDB } from '@/utils/taskStorage';
 import { getSetting } from '@/utils/settingsStorage';
 import { CalendarEvent } from '@/types/note';
+import { toast } from 'sonner';
 
 const SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
@@ -14,13 +15,13 @@ const SYNC_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 export const useSystemCalendarSync = () => {
   const lastSyncRef = useRef<number>(0);
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  const toastIdRef = useRef<string | number | undefined>();
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
 
     // Initialize permissions on mount
     initializeCalendarSync().catch((e) => {
-      // Suppress "not implemented on android" errors silently
       if (String(e).includes('not implemented')) return;
       console.warn('Calendar sync init:', e);
     });
@@ -36,15 +37,31 @@ export const useSystemCalendarSync = () => {
 
         const tasks = await loadTasksFromDB();
         const events = await getSetting<CalendarEvent[]>('calendarEvents', []);
-        const result = await performFullCalendarSync(tasks, events);
+
+        // Show initial sync toast
+        toastIdRef.current = toast.loading('📅 Syncing calendar...', { duration: Infinity });
+
+        const result = await performFullCalendarSync(tasks, events, ({ phase, current, total }) => {
+          if (toastIdRef.current && total > 0) {
+            toast.loading(`📅 ${phase}: ${current}/${total}`, { id: toastIdRef.current, duration: Infinity });
+          }
+        });
+
+        // Show completion toast
         if (result.pushed > 0 || result.pulled > 0) {
-          console.log(`Calendar sync: pushed ${result.pushed}, pulled ${result.pulled}`);
+          toast.success(`📅 Sync complete: ${result.pushed} pushed, ${result.pulled} pulled`, {
+            id: toastIdRef.current,
+            duration: 3000,
+          });
+        } else {
+          toast.dismiss(toastIdRef.current);
         }
+
         if (result.errors.length > 0) {
           console.warn('Calendar sync errors:', result.errors);
         }
       } catch (e) {
-        // Never let sync crash the app
+        if (toastIdRef.current) toast.dismiss(toastIdRef.current);
         const msg = String(e);
         if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
           console.warn('Calendar sync failed:', e);
