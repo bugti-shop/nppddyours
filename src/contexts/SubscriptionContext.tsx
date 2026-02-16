@@ -130,7 +130,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const [listenerHandle, setListenerHandle] = useState<PurchasesCallbackId | null>(null);
 
-  // Load local admin bypass on mount
+  // Load local admin bypass on mount + listen for activation
   useEffect(() => {
     const loadLocal = async () => {
       try {
@@ -143,6 +143,13 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       }
     };
     loadLocal();
+
+    // Listen for admin bypass activation from OnboardingFlow or elsewhere
+    const handleAdminBypass = () => {
+      setLocalProAccess(true);
+    };
+    window.addEventListener('adminBypassActivated', handleAdminBypass);
+    return () => window.removeEventListener('adminBypassActivated', handleAdminBypass);
   }, []);
 
   // ==================== RevenueCat Logic ====================
