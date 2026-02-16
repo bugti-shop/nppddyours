@@ -93,7 +93,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
     priority: 'sheet',
   });
 
-  const { requireFeature } = useSubscription();
+  const { requireFeature, isRecurringSubscriber } = useSubscription();
   const [taskText, setTaskText] = useState('');
   const [priority, setPriority] = useState<Priority>('none');
   const [dueDate, setDueDate] = useState<Date | undefined>();
@@ -1546,6 +1546,13 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                   <Popover key={action.id} open={showLocationInput} onOpenChange={setShowLocationInput}>
                     <PopoverTrigger asChild>
                       <button
+                        onClick={(e) => {
+                          if (!requireFeature('location_reminders')) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return;
+                          }
+                        }}
                         className={cn(
                           "relative flex items-center gap-1.5 px-3 py-2 rounded-md border transition-all whitespace-nowrap",
                           locationReminder?.enabled ? "border-pink-500 bg-pink-50 dark:bg-pink-950/30" : 
@@ -1557,6 +1564,7 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                         <span className={cn("text-sm whitespace-nowrap", (location || locationReminder?.enabled) ? "text-pink-600 dark:text-pink-400" : "text-muted-foreground")}>
                           {locationReminder?.enabled ? t('taskInput.locationReminder') : location ? t('taskInput.hasLocation') : t('taskInput.location')}
                         </span>
+                        {!isRecurringSubscriber && <Crown className="h-3 w-3 text-amber-500 flex-shrink-0" />}
                       </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-80 p-3 bg-popover z-[100]" align="start">
