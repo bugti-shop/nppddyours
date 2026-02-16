@@ -2101,7 +2101,10 @@
     "syncFailed": "Échec de la synchronisation",
     "pulledEvents": "Événements importés",
     "noPulledEvents": "Aucun événement importé du calendrier",
-    "allDay": "Toute la journée"
+    "allDay": "Toute la journée",
+    "tapToEnable": "Appuyez sur \"Synchroniser\" pour activer la synchronisation bidirectionnelle",
+    "twoWayDesc": "Synchronisation bidirectionnelle entre votre app et le calendrier système",
+    "permissionDenied": "Autorisation de calendrier refusée"
   },
   "remindersPage": {
     "title": "Rappels",

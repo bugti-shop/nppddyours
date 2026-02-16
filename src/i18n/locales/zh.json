@@ -2067,7 +2067,10 @@
     "syncFailed": "同步失败",
     "pulledEvents": "已拉取的事件",
     "noPulledEvents": "没有从设备日历拉取事件",
-    "allDay": "全天"
+    "allDay": "全天",
+    "tapToEnable": "点击\"立即同步\"启用双向日历同步",
+    "twoWayDesc": "应用与系统日历之间的双向同步",
+    "permissionDenied": "日历权限被拒绝"
   },
   "remindersPage": {
     "title": "提醒",

@@ -2072,7 +2072,10 @@
     "syncFailed": "동기화 실패",
     "pulledEvents": "가져온 이벤트",
     "noPulledEvents": "기기 캘린더에서 가져온 이벤트 없음",
-    "allDay": "종일"
+    "allDay": "종일",
+    "tapToEnable": "양방향 캘린더 동기화를 활성화하려면 \"지금 동기화\"를 탭하세요",
+    "twoWayDesc": "앱과 시스템 캘린더 간의 양방향 동기화",
+    "permissionDenied": "캘린더 권한이 거부되었습니다"
   },
   "remindersPage": {
     "title": "알림",

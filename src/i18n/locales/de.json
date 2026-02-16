@@ -2102,7 +2102,10 @@
     "syncFailed": "Synchronisierung fehlgeschlagen",
     "pulledEvents": "Importierte Ereignisse",
     "noPulledEvents": "Keine Ereignisse vom Gerätekalender importiert",
-    "allDay": "Ganztägig"
+    "allDay": "Ganztägig",
+    "tapToEnable": "Tippe auf \"Jetzt synchronisieren\" um die bidirektionale Synchronisierung zu aktivieren",
+    "twoWayDesc": "Bidirektionale Synchronisierung zwischen deiner App und dem Systemkalender",
+    "permissionDenied": "Kalenderberechtigung verweigert"
   },
   "remindersPage": {
     "title": "Erinnerungen",

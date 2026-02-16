@@ -1905,7 +1905,10 @@
     "syncFailed": "Senkronizasyon başarısız",
     "pulledEvents": "İçe aktarılan etkinlikler",
     "noPulledEvents": "Cihaz takviminden etkinlik alınamadı",
-    "allDay": "Tüm gün"
+    "allDay": "Tüm gün",
+    "tapToEnable": "Çift yönlü takvim senkronizasyonunu etkinleştirmek için \"Şimdi Senkronize Et\"e dokunun",
+    "twoWayDesc": "Uygulamanız ile sistem takvimi arasında çift yönlü senkronizasyon",
+    "permissionDenied": "Takvim izni reddedildi"
   },
   "remindersPage": {
     "title": "Hatırlatıcılar",
