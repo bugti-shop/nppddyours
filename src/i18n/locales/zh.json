@@ -1080,7 +1080,13 @@
     "copyWithFormatting": "带格式复制",
     "copyAll": "全部复制",
     "copiedWithFormatting": "已带格式复制！",
-    "copyFormattingDesc": "粘贴到任何地方以保持样式"
+    "copyFormattingDesc": "粘贴到任何地方以保持样式",
+    "extractEmails": "提取邮箱",
+    "extractPhones": "提取电话号码",
+    "extractUrls": "提取链接",
+    "extractHashtags": "提取标签",
+    "replaceContent": "替换内容",
+    "copyToClipboard": "复制到剪贴板"
   },
   "notePin": {
     "setPin": "设置PIN",

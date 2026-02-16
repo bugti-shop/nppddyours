@@ -963,7 +963,13 @@
     "copyWithFormatting": "書式付きでコピー",
     "copyAll": "すべてコピー",
     "copiedWithFormatting": "書式付きでコピーしました！",
-    "copyFormattingDesc": "スタイルを維持するにはどこにでも貼り付けてください"
+    "copyFormattingDesc": "スタイルを維持するにはどこにでも貼り付けてください",
+    "extractEmails": "メールを抽出",
+    "extractPhones": "電話番号を抽出",
+    "extractUrls": "URLを抽出",
+    "extractHashtags": "ハッシュタグを抽出",
+    "replaceContent": "コンテンツを置換",
+    "copyToClipboard": "クリップボードにコピー"
   },
   "notePin": {
     "setPin": "PINを設定",

@@ -1105,7 +1105,13 @@
     "copyWithFormatting": "نسخ مع التنسيق",
     "copyAll": "نسخ الكل",
     "copiedWithFormatting": "تم النسخ مع التنسيق!",
-    "copyFormattingDesc": "الصق في أي مكان للاحتفاظ بالتنسيق"
+    "copyFormattingDesc": "الصق في أي مكان للاحتفاظ بالتنسيق",
+    "extractEmails": "استخراج البريد الإلكتروني",
+    "extractPhones": "استخراج أرقام الهاتف",
+    "extractUrls": "استخراج الروابط",
+    "extractHashtags": "استخراج الهاشتاقات",
+    "replaceContent": "استبدال المحتوى",
+    "copyToClipboard": "نسخ إلى الحافظة"
   },
   "notePin": {
     "setPin": "تعيين PIN",

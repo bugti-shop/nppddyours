@@ -1107,7 +1107,13 @@
     "copyWithFormatting": "Mit Formatierung kopieren",
     "copyAll": "Alles kopieren",
     "copiedWithFormatting": "Mit Formatierung kopiert!",
-    "copyFormattingDesc": "Überall einfügen, um Ihre Stile beizubehalten"
+    "copyFormattingDesc": "Überall einfügen, um Ihre Stile beizubehalten",
+    "extractEmails": "E-Mails extrahieren",
+    "extractPhones": "Telefonnummern extrahieren",
+    "extractUrls": "URLs extrahieren",
+    "extractHashtags": "Hashtags extrahieren",
+    "replaceContent": "Inhalt ersetzen",
+    "copyToClipboard": "In die Zwischenablage kopieren"
   },
   "notePin": {
     "setPin": "PIN festlegen",

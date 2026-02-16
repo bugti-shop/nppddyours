@@ -681,7 +681,13 @@
     "fontSizes": { "extraSmall": "بہت چھوٹا", "small": "چھوٹا", "medium": "درمیانہ", "large": "بڑا", "extraLarge": "بہت بڑا", "huge": "دیوہیکل" },
     "letterSpacings": { "tight": "تنگ", "normal": "عام", "wide": "چوڑا", "wider": "زیادہ چوڑا", "widest": "سب سے چوڑا" },
     "lineHeights": { "compact": "کمپیکٹ", "normal": "عام", "relaxed": "آرام دہ", "loose": "ڈھیلا", "extraLoose": "بہت ڈھیلا" },
-    "imageAligned": "تصویر {{align}} سیدھ میں", "imageDeleted": "تصویر حذف ہو گئی"
+    "imageAligned": "تصویر {{align}} سیدھ میں", "imageDeleted": "تصویر حذف ہو گئی",
+    "extractEmails": "ای میلز نکالیں",
+    "extractPhones": "فون نمبر نکالیں",
+    "extractUrls": "URLs نکالیں",
+    "extractHashtags": "ہیش ٹیگز نکالیں",
+    "replaceContent": "مواد تبدیل کریں",
+    "copyToClipboard": "کلپ بورڈ پر کاپی کریں"
   },
   "dateTime": {
     "date": "تاریخ",

@@ -938,7 +938,13 @@
     "copyWithFormatting": "Biçimlendirmeyle Kopyala",
     "copyAll": "Tümünü Kopyala",
     "copiedWithFormatting": "Biçimlendirmeyle kopyalandı!",
-    "copyFormattingDesc": "Stillerinizi korumak için herhangi bir yere yapıştırın"
+    "copyFormattingDesc": "Stillerinizi korumak için herhangi bir yere yapıştırın",
+    "extractEmails": "E-postaları Çıkar",
+    "extractPhones": "Telefon Numaralarını Çıkar",
+    "extractUrls": "URL'leri Çıkar",
+    "extractHashtags": "Hashtag'leri Çıkar",
+    "replaceContent": "İçeriği Değiştir",
+    "copyToClipboard": "Panoya Kopyala"
   },
   "notePin": {
     "setPin": "PIN Ayarla",

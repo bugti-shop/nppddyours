@@ -1080,7 +1080,13 @@
     "copyWithFormatting": "העתק עם עיצוב",
     "copyAll": "העתק הכל",
     "copiedWithFormatting": "הועתק עם עיצוב!",
-    "copyFormattingDesc": "הדבק בכל מקום כדי לשמור על הסגנונות שלך"
+    "copyFormattingDesc": "הדבק בכל מקום כדי לשמור על הסגנונות שלך",
+    "extractEmails": "חילוץ אימיילים",
+    "extractPhones": "חילוץ מספרי טלפון",
+    "extractUrls": "חילוץ כתובות URL",
+    "extractHashtags": "חילוץ האשטאגים",
+    "replaceContent": "החלפת תוכן",
+    "copyToClipboard": "העתק ללוח"
   },
   "notePin": {
     "setPin": "הגדר PIN",
