@@ -284,14 +284,18 @@ const yieldToUI = () => new Promise(resolve => setTimeout(resolve, 0));
 // ─── Batch processing helper ────────────────────────────────────
 const BATCH_SIZE = 25;
 
+export type SyncProgressCallback = (info: { phase: string; current: number; total: number }) => void;
+
 const processBatch = async <T>(
   items: T[],
   processor: (item: T) => Promise<void>,
+  onProgress?: (processed: number, total: number) => void,
 ): Promise<{ processed: number; errors: string[] }> => {
   let processed = 0;
   const errors: string[] = [];
+  const total = items.length;
 
-  for (let i = 0; i < items.length; i += BATCH_SIZE) {
+  for (let i = 0; i < total; i += BATCH_SIZE) {
     const batch = items.slice(i, i + BATCH_SIZE);
     
     for (const item of batch) {
@@ -306,6 +310,7 @@ const processBatch = async <T>(
       }
     }
 
+    onProgress?.(processed, total);
     // Yield to UI thread between batches to keep app responsive
     await yieldToUI();
   }
@@ -317,6 +322,7 @@ const processBatch = async <T>(
 export const performFullCalendarSync = async (
   tasks: TodoItem[],
   appEvents: AppCalendarEvent[],
+  onProgress?: SyncProgressCallback,
 ): Promise<SystemCalendarSyncResult> => {
   const result: SystemCalendarSyncResult = { pushed: 0, pulled: 0, errors: [] };
 
@@ -334,20 +340,29 @@ export const performFullCalendarSync = async (
 
     // ── Push tasks with due dates (batched) ──
     const tasksWithDates = (tasks || []).filter(t => t?.dueDate && !t?.completed);
+    onProgress?.({ phase: 'Pushing tasks', current: 0, total: tasksWithDates.length });
     const taskResult = await processBatch(tasksWithDates, async (task) => {
       await pushTaskToNativeCalendar(task);
+    }, (cur, tot) => {
+      result.pushed = cur;
+      onProgress?.({ phase: 'Pushing tasks', current: cur, total: tot });
     });
-    result.pushed += taskResult.processed;
+    result.pushed = taskResult.processed;
     result.errors.push(...taskResult.errors.map(e => `Task push: ${e}`));
 
     // ── Push app calendar events (batched) ──
-    const eventResult = await processBatch(appEvents || [], async (event) => {
+    const eventsArr = appEvents || [];
+    onProgress?.({ phase: 'Pushing events', current: 0, total: eventsArr.length });
+    const eventResult = await processBatch(eventsArr, async (event) => {
       await pushEventToNativeCalendar(event);
+    }, (cur, tot) => {
+      onProgress?.({ phase: 'Pushing events', current: result.pushed + cur, total: result.pushed + tot });
     });
     result.pushed += eventResult.processed;
     result.errors.push(...eventResult.errors.map(e => `Event push: ${e}`));
 
     // ── Pull from native calendar ──
+    onProgress?.({ phase: 'Pulling events', current: 0, total: 0 });
     try {
       const pulledEvents = await pullFromNativeCalendar();
       const existingAppEvents = await getSetting<AppCalendarEvent[]>('calendarEvents', []);
@@ -360,6 +375,7 @@ export const performFullCalendarSync = async (
         result.pulled = newEvents.length;
         window.dispatchEvent(new CustomEvent('calendarEventsUpdated'));
       }
+      onProgress?.({ phase: 'Pulling events', current: result.pulled, total: result.pulled });
     } catch (pullErr) {
       const msg = String(pullErr);
       if (!msg.includes('not implemented') && !msg.includes('UNIMPLEMENTED')) {
@@ -385,6 +401,7 @@ export const performFullCalendarSync = async (
     }
   }
 
+  onProgress?.({ phase: 'Done', current: result.pushed + result.pulled, total: result.pushed + result.pulled });
   return result;
 };
 
