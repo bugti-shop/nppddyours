@@ -23,6 +23,11 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   public static getDerivedStateFromError(error: Error): Partial<State> {
+    // Suppress known React DOM reconciliation errors (e.g. portal removal race conditions)
+    // These are non-fatal and don't affect user experience
+    if (error?.message?.includes('removeChild') || error?.message?.includes('insertBefore')) {
+      return {};
+    }
     return { hasError: true, error };
   }
 
