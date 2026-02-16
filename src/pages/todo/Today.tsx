@@ -396,22 +396,21 @@ const Today = () => {
       ...task 
     };
 
-    // If user set ANY date/time (including via NLP), schedule immediately.
-    const shouldSchedule = !!task.dueDate || !!task.reminderTime;
-    if (shouldSchedule) {
-      try { await notificationManager.scheduleTaskReminder(newItem); } catch (error) { console.error('Failed to schedule notification:', error); }
-    } else {
-      // Schedule auto-reminders for tasks without date/time (3x daily)
-      try { await notificationManager.scheduleAutoReminders(newItem); } catch (error) { console.error('Failed to schedule auto-reminders:', error); }
-    }
-
-    // Add task based on user preference (top or bottom)
+    // Add task to state FIRST (non-blocking) so UI updates immediately
     if (taskAddPosition === 'bottom') {
       setItems([...items, newItem]);
     } else {
       setItems([newItem, ...items]);
     }
     setInputSectionId(null);
+
+    // Schedule notifications in background (fire-and-forget) - don't block task creation
+    const shouldSchedule = !!task.dueDate || !!task.reminderTime;
+    if (shouldSchedule) {
+      notificationManager.scheduleTaskReminder(newItem).catch(error => console.error('Failed to schedule notification:', error));
+    } else {
+      notificationManager.scheduleAutoReminders(newItem).catch(error => console.error('Failed to schedule auto-reminders:', error));
+    }
     
   };
 

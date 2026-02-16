@@ -393,15 +393,18 @@ const TodoCalendar = () => {
 
   const handleAddTask = async (task: Omit<TodoItem, 'id' | 'completed'>) => {
     const newItem: TodoItem = { id: Date.now().toString(), completed: false, ...task };
-    if (newItem.dueDate || newItem.reminderTime) {
-      try { await notificationManager.scheduleTaskReminder(newItem); } catch (error) { console.error('Failed to schedule notification:', error); }
-    }
+    // Add task to storage FIRST, then schedule notifications in background
     const allItems = await loadTodoItems();
     allItems.unshift(newItem);
     await saveTodoItems(allItems);
     setItems(allItems);
     setTaskDates(allItems.filter(t => t.dueDate).map(t => new Date(t.dueDate!)));
     window.dispatchEvent(new Event('tasksUpdated'));
+    
+    // Fire-and-forget notification scheduling
+    if (newItem.dueDate || newItem.reminderTime) {
+      notificationManager.scheduleTaskReminder(newItem).catch(error => console.error('Failed to schedule notification:', error));
+    }
   };
 
   const handleCreateFolder = async (name: string, color: string) => {

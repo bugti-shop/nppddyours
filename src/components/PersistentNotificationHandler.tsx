@@ -105,15 +105,6 @@ export const PersistentNotificationHandler = () => {
 
       await saveTodoItems([newTask, ...tasks]);
       
-      // Schedule notification if reminder time is set
-      if (newTask.reminderTime) {
-        try {
-          await notificationManager.scheduleTaskReminder(newTask);
-        } catch (e) {
-          console.warn('Failed to schedule notification:', e);
-        }
-      }
-      
       toast({
         title: t('toasts.taskAdded', 'Task added'),
         description: newTask.text,
@@ -122,8 +113,10 @@ export const PersistentNotificationHandler = () => {
       // Dispatch event to refresh task lists
       window.dispatchEvent(new CustomEvent('todoItemsChanged'));
 
-      // Keep the sheet open so users can add more tasks
-      // Sheet will be closed when user taps outside or presses back
+      // Fire-and-forget notification scheduling
+      if (newTask.reminderTime) {
+        notificationManager.scheduleTaskReminder(newTask).catch(e => console.warn('Failed to schedule notification:', e));
+      }
     } catch (error) {
       console.error('Error adding task:', error);
       toast({
