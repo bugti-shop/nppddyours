@@ -22,7 +22,7 @@ const PrivacyPolicy = () => {
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">1. Introduction</h3>
           <p className="text-muted-foreground leading-relaxed">
-            Welcome to Npd ("we," "our," or "us"). We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services (collectively, the "Service").
+            Welcome to NotePad ("we," "our," or "us"). We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and related services (collectively, the "Service").
           </p>
           <p className="text-muted-foreground leading-relaxed">
             By using the Service, you agree to the collection and use of information in accordance with this policy. If you do not agree with the terms of this Privacy Policy, please do not access or use the Service.
@@ -154,7 +154,7 @@ const PrivacyPolicy = () => {
             If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at:
           </p>
           <p className="text-muted-foreground">
-            Email: bugtishop@gmail.com
+            Email: support@notepad.app
           </p>
         </section>
       </main>

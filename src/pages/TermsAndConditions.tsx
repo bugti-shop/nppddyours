@@ -22,14 +22,14 @@ const TermsAndConditions = () => {
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">1. Acceptance of Terms</h3>
           <p className="text-muted-foreground leading-relaxed">
-            By downloading, installing, or using the Npd application ("App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App. These Terms constitute a legally binding agreement between you and Npd ("we," "our," or "us").
+            By downloading, installing, or using the NotePad application ("App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App. These Terms constitute a legally binding agreement between you and NotePad ("we," "our," or "us").
           </p>
         </section>
 
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">2. Description of Service</h3>
           <p className="text-muted-foreground leading-relaxed">
-            Npd is a productivity application that provides note-taking, task management, calendar integration, reminders, and related organizational tools. The Service includes both free and premium subscription-based features.
+            NotePad is a productivity application that provides note-taking, task management, calendar integration, reminders, and related organizational tools. The Service includes both free and premium subscription-based features.
           </p>
         </section>
 
@@ -100,7 +100,7 @@ const TermsAndConditions = () => {
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">6. Intellectual Property</h3>
           <p className="text-muted-foreground leading-relaxed">
-            The App, including its design, features, code, graphics, logos, and all related intellectual property, is owned by Npd and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of the App without our prior written consent.
+            The App, including its design, features, code, graphics, logos, and all related intellectual property, is owned by NotePad and protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, sell, or lease any part of the App without our prior written consent.
           </p>
         </section>
 
@@ -149,7 +149,7 @@ const TermsAndConditions = () => {
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">11. Limitation of Liability</h3>
           <p className="text-muted-foreground leading-relaxed">
-            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL NPD, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM:
+            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL NOTEPAD, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM:
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-1 ml-2">
             <li>Your access to or use of (or inability to access or use) the App</li>
@@ -163,7 +163,7 @@ const TermsAndConditions = () => {
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">12. Indemnification</h3>
           <p className="text-muted-foreground leading-relaxed">
-            You agree to indemnify, defend, and hold harmless Npd and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses arising out of or in connection with your use of the App, your violation of these Terms, or your violation of any rights of a third party.
+            You agree to indemnify, defend, and hold harmless NotePad and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses arising out of or in connection with your use of the App, your violation of these Terms, or your violation of any rights of a third party.
           </p>
         </section>
 
@@ -181,7 +181,7 @@ const TermsAndConditions = () => {
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">14. Governing Law</h3>
           <p className="text-muted-foreground leading-relaxed">
-            These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Npd operates, without regard to its conflict of law provisions. Any disputes arising under these Terms shall be resolved in the competent courts of that jurisdiction.
+            These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which NotePad operates, without regard to its conflict of law provisions. Any disputes arising under these Terms shall be resolved in the competent courts of that jurisdiction.
           </p>
         </section>
 
@@ -205,7 +205,7 @@ const TermsAndConditions = () => {
             If you have any questions about these Terms, please contact us at:
           </p>
           <p className="text-muted-foreground">
-            Email: bugtishop@gmail.com
+            Email: support@notepad.app
           </p>
         </section>
       </main>
