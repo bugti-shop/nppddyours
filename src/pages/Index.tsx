@@ -25,7 +25,7 @@ import { Search, Plus, StickyNote, FileText, FileEdit, Pen, ListTodo, Bell, Cloc
 import { getAllUpcomingReminders } from '@/utils/noteNotifications';
 import { format, isToday, isTomorrow, differenceInDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
-import appLogo from '@/assets/app-logo.png';
+import { useRetentionLogo } from '@/hooks/useRetentionLogo';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,6 +45,7 @@ const Index = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { logo: appLogo } = useRetentionLogo();
   
   // Use global notes context - no more local loading!
   const { notes, setNotes, notesMeta, isLoading: notesLoading } = useNotes();
