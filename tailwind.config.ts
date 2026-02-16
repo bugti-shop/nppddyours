@@ -136,6 +136,11 @@ export default {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        "shake": {
+          "0%, 100%": { transform: "rotate(0deg)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "rotate(-3deg)" },
+          "20%, 40%, 60%, 80%": { transform: "rotate(3deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -144,6 +149,7 @@ export default {
         "scale-in": "scale-in 0.2s ease-out",
         "slide-in-right": "slide-in-right 0.3s ease-out",
         "slide-in-left": "slide-in-left 0.3s ease-out",
+        "shake": "shake 0.6s ease-in-out infinite",
       },
     },
   },
