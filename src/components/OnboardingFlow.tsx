@@ -630,6 +630,8 @@ export default function OnboardingFlow({
                           if (adminCode.trim().toUpperCase() === validCode) {
                             const { setSetting } = await import('@/utils/settingsStorage');
                             await setSetting('npd_admin_bypass', true);
+                            // Dispatch event so SubscriptionProvider picks up the change immediately
+                            window.dispatchEvent(new CustomEvent('adminBypassActivated'));
                             onComplete();
                           } else {
                             setAdminError(t('onboarding.paywall.invalidCode'));
