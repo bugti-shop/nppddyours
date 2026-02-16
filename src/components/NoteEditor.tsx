@@ -477,7 +477,16 @@ export const NoteEditor = ({ note, isOpen, onClose, onSave, defaultType = 'regul
     const savedNote = buildCurrentNote();
 
     if (full) {
-      // Notification scheduling removed
+      // Schedule or cancel note reminder in background
+      if (savedNote.reminderEnabled && savedNote.reminderTime) {
+        import('@/utils/reminderScheduler').then(({ scheduleNoteReminder }) => {
+          scheduleNoteReminder(savedNote.id, savedNote.title || 'Note reminder', new Date(savedNote.reminderTime!)).catch(console.warn);
+        });
+      } else {
+        import('@/utils/reminderScheduler').then(({ cancelNoteReminder }) => {
+          cancelNoteReminder(savedNote.id).catch(console.warn);
+        });
+      }
 
       // Save version history (only on "full" save)
       saveNoteVersion(savedNote, note ? 'edit' : 'create');

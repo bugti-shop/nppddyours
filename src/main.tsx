@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import "./index.css";
 import "./i18n";
 import { migrateLocalStorageToIndexedDB, getSetting } from "./utils/settingsStorage";
+import { initializeReminders } from "./utils/reminderScheduler";
 import { migrateNotesToIndexedDB } from "./utils/noteStorage";
 import { startBackgroundScheduler } from "./utils/backgroundScheduler";
 import { initializeTaskOrder } from "./utils/taskOrderStorage";
@@ -28,6 +29,9 @@ const AppWithMigration = () => {
         
         // Start background scheduler for automatic task rollovers
         startBackgroundScheduler();
+        
+        // Initialize reminder system (channels + permissions)
+        initializeReminders().catch(console.warn);
         
         // Configure status bar for native apps
         const theme = await getSetting<string>('theme', 'light');
