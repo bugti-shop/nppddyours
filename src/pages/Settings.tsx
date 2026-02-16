@@ -522,6 +522,17 @@ const Settings = () => {
         </div>
       </main>
 
+      {/* Legal Links */}
+      <div className="flex items-center justify-center gap-4 pb-24 pt-4">
+        <a href="/privacy-policy" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+          {t('settings.privacyPolicy', 'Privacy Policy')}
+        </a>
+        <span className="text-muted-foreground/40">•</span>
+        <a href="/terms-and-conditions" className="text-xs text-muted-foreground hover:text-primary transition-colors">
+          {t('settings.termsOfService', 'Terms of Service')}
+        </a>
+      </div>
+
       <BottomNavigation />
 
       {/* Delete Confirmation Dialog */}
