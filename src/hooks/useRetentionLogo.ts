@@ -16,6 +16,7 @@ const TWO_DAYS_MS = 2 * ONE_DAY_MS;
  */
 export const useRetentionLogo = () => {
   const [logo, setLogo] = useState(defaultLogo);
+  const [mood, setMood] = useState<'default' | 'sad' | 'angry'>('default');
 
   useEffect(() => {
     const check = async () => {
@@ -26,17 +27,18 @@ export const useRetentionLogo = () => {
         const elapsed = now - lastOpen;
         if (elapsed >= TWO_DAYS_MS) {
           setLogo(angryLogo);
+          setMood('angry');
         } else if (elapsed >= ONE_DAY_MS) {
           setLogo(sadLogo);
+          setMood('sad');
         }
       }
 
-      // Update last open time → next time user opens, logo resets to default
       await setSetting(LAST_OPEN_KEY, now);
     };
 
     check();
   }, []);
 
-  return { logo };
+  return { logo, mood };
 };
