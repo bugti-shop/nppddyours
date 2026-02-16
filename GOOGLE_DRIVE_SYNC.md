@@ -65,15 +65,13 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
 }
 ```
 
-### 4. Add Google Services (Optional for Firebase)
+### 4. Google Services Plugin
 
-If you're using Firebase for additional features, add to `android/app/build.gradle`:
+The Google Services plugin is required for Google Sign-In. Add to `android/app/build.gradle`:
 
 ```gradle
 apply plugin: 'com.google.gms.google-services'
 ```
-
-And place your `google-services.json` in `android/app/`.
 
 ---
 

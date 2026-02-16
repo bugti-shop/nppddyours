@@ -1,6 +1,6 @@
 /**
  * Push Notification Manager
- * Now uses Local Notifications. Push (FCM) removed.
+ * Uses Capacitor Local Notifications for on-device notifications.
  */
 
 export class PushNotificationManager {

@@ -1,7 +1,7 @@
 /**
  * Background Task Scheduler
  * Handles periodic checks for task rollovers and deadline escalations
- * Notification scheduling now delegated to FCM backend
+ * Notification scheduling handled via Capacitor Local Notifications
  */
 
 import { loadTodoItems, saveTodoItems } from './todoItemsStorage';

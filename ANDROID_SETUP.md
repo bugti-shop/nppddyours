@@ -112,14 +112,6 @@ This guide provides complete Android native code including:
             </intent-filter>
         </receiver>
         
-        <!-- Firebase Messaging Service (if using push notifications) -->
-        <service
-            android:name="com.google.firebase.messaging.FirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
         
         <!-- ==================== LOCATION SERVICE ==================== -->
         
@@ -135,11 +127,11 @@ This guide provides complete Android native code including:
 
 ---
 
-## Complete MainActivity.java (Google Sign-In + FCM Notification Channels)
+## Complete MainActivity.java (Google Sign-In + Local Notification Channels)
 
 **File:** `android/app/src/main/java/nota/npd/com/MainActivity.java`
 
-This single file handles **both** native Google Sign-In (Capgo Social Login) **and** FCM notification channels (`npd_reminders` + `npd_general`).
+This single file handles **both** native Google Sign-In (Capgo Social Login) **and** local notification channels (`npd_reminders` + `npd_general`).
 
 ```java
 package nota.npd.com;
@@ -162,7 +154,7 @@ import ee.forgr.capacitor.social.login.ModifiedMainActivityForSocialLoginPlugin;
  * Main Activity for Npd App
  * 
  * - Google Sign-In via Capgo Social Login plugin
- * - FCM notification channels (npd_reminders, npd_general)
+ * - Local notification channels (npd_reminders, npd_general)
  */
 public class MainActivity extends BridgeActivity implements ModifiedMainActivityForSocialLoginPlugin {
     
@@ -174,11 +166,11 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
         registerPlugin(SocialLoginPlugin.class);
         super.onCreate(savedInstanceState);
         createNotificationChannels();
-        Log.d(TAG, "onCreate: App started with Social Login + FCM channels");
+        Log.d(TAG, "onCreate: App started with Social Login + notification channels");
     }
     
     /**
-     * Create notification channels for FCM push notifications.
+     * Create notification channels for local notifications.
      * Required for Android 8.0 (API 26) and above.
      */
     private void createNotificationChannels() {
@@ -458,15 +450,6 @@ Copy this complete ProGuard configuration to prevent code stripping issues in re
 -keep class de.nicovince.capacitor.calendar.** { *; }
 -keep class com.ebarooni.capacitorcalendar.** { *; }
 
-# ==================== FIREBASE ====================
--keep class com.google.firebase.** { *; }
--keep class com.google.firebase.messaging.** { *; }
--keep class com.google.firebase.iid.** { *; }
--keep class com.google.firebase.analytics.** { *; }
-
-# Firebase Messaging Service
--keep class com.google.firebase.messaging.FirebaseMessagingService { *; }
--keep class * extends com.google.firebase.messaging.FirebaseMessagingService { *; }
 
 # ==================== REVENUECAT ====================
 -keep class com.revenuecat.** { *; }
