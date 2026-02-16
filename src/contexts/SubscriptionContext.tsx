@@ -413,6 +413,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   // Detect plan type from RevenueCat entitlement
   const planType: SubscriptionPlanType = useMemo(() => {
     if (!isPro) return 'none';
+    // Admin bypass defaults to weekly-equivalent (full access including recurring features)
+    if (localProAccess) return 'weekly';
     if (!customerInfo) return 'none';
     const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
     if (!entitlement) return 'none';
@@ -420,8 +422,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     if (productId === PRODUCT_IDS.weekly || productId.includes('wk')) return 'weekly';
     if (productId === PRODUCT_IDS.monthly || productId.includes('month')) return 'monthly';
     if (productId === PRODUCT_IDS.lifetime || productId.includes('lv') || productId.includes('lifetime')) return 'lifetime';
-    // Admin bypass defaults to weekly-equivalent (full access)
-    if (localProAccess) return 'weekly';
+    return 'none';
     return 'none';
   }, [isPro, customerInfo, localProAccess]);
 
