@@ -127,19 +127,16 @@ This guide provides complete Android native code including:
 
 ---
 
-## Complete MainActivity.java (Google Sign-In + Local Notification Channels)
+## MainActivity.java — Google Sign-In Only
 
 **File:** `android/app/src/main/java/nota/npd/com/MainActivity.java`
 
-This single file handles **both** native Google Sign-In (Capgo Social Login) **and** local notification channels (`npd_reminders` + `npd_general`).
+This file handles **only** native Google Sign-In via the Capgo Social Login plugin. Notification channels are set up separately (see next section).
 
 ```java
 package nota.npd.com;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -151,10 +148,8 @@ import ee.forgr.capacitor.social.login.SocialLoginPlugin;
 import ee.forgr.capacitor.social.login.ModifiedMainActivityForSocialLoginPlugin;
 
 /**
- * Main Activity for Npd App
- * 
- * - Google Sign-In via Capgo Social Login plugin
- * - Local notification channels (npd_reminders, npd_general)
+ * Main Activity for Npd App — Google Sign-In only.
+ * Notification channels are created by NpdApplication.java on app startup.
  */
 public class MainActivity extends BridgeActivity implements ModifiedMainActivityForSocialLoginPlugin {
     
@@ -165,40 +160,7 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
         // Register SocialLoginPlugin BEFORE calling super.onCreate()
         registerPlugin(SocialLoginPlugin.class);
         super.onCreate(savedInstanceState);
-        createNotificationChannels();
-        Log.d(TAG, "onCreate: App started with Social Login + notification channels");
-    }
-    
-    /**
-     * Create notification channels for local notifications.
-     * Required for Android 8.0 (API 26) and above.
-     */
-    private void createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager manager = getSystemService(NotificationManager.class);
-
-            // High importance: sound + vibration + heads-up display
-            NotificationChannel reminders = new NotificationChannel(
-                "npd_reminders",
-                "Reminders",
-                NotificationManager.IMPORTANCE_HIGH
-            );
-            reminders.setDescription("Task, note, and habit reminders");
-            reminders.enableVibration(true);
-            reminders.enableLights(true);
-            manager.createNotificationChannel(reminders);
-
-            // Default importance for general notifications
-            NotificationChannel general = new NotificationChannel(
-                "npd_general",
-                "General",
-                NotificationManager.IMPORTANCE_DEFAULT
-            );
-            general.setDescription("General app notifications");
-            manager.createNotificationChannel(general);
-            
-            Log.d(TAG, "Notification channels created");
-        }
+        Log.d(TAG, "onCreate: App started with Social Login");
     }
     
     @Override
@@ -238,13 +200,88 @@ public class MainActivity extends BridgeActivity implements ModifiedMainActivity
     
     /**
      * Required by ModifiedMainActivityForSocialLoginPlugin interface.
-     * This confirms MainActivity is properly configured for the Social Login plugin.
      */
     @Override
     public void IHaveModifiedTheMainActivityForTheUseWithSocialLoginPlugin() {
         // Empty implementation - confirms the interface is implemented
     }
 }
+```
+
+---
+
+## Notification Channels Setup (Separate)
+
+**File:** `android/app/src/main/java/nota/npd/com/NpdApplication.java`
+
+Create this **separate Application class** to set up notification channels once on app startup. This keeps MainActivity clean and ensures channels exist before any notification is scheduled.
+
+> **Important:** You must also register this class in `AndroidManifest.xml` by adding `android:name=".NpdApplication"` to the `<application>` tag.
+
+```java
+package nota.npd.com;
+
+import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
+import android.util.Log;
+
+/**
+ * Application class for Npd — creates notification channels on app startup.
+ * Registered in AndroidManifest.xml via android:name=".NpdApplication"
+ */
+public class NpdApplication extends Application {
+
+    private static final String TAG = "NpdApplication";
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        createNotificationChannels();
+        Log.d(TAG, "Application started, notification channels ready");
+    }
+
+    private void createNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = getSystemService(NotificationManager.class);
+
+            // High importance: sound + vibration + heads-up display
+            NotificationChannel reminders = new NotificationChannel(
+                "npd_reminders",
+                "Reminders",
+                NotificationManager.IMPORTANCE_HIGH
+            );
+            reminders.setDescription("Task, note, and habit reminders");
+            reminders.enableVibration(true);
+            reminders.enableLights(true);
+            manager.createNotificationChannel(reminders);
+
+            // Default importance for general notifications
+            NotificationChannel general = new NotificationChannel(
+                "npd_general",
+                "General",
+                NotificationManager.IMPORTANCE_DEFAULT
+            );
+            general.setDescription("General app notifications");
+            manager.createNotificationChannel(general);
+
+            Log.d(TAG, "Notification channels created");
+        }
+    }
+}
+```
+
+### AndroidManifest.xml Change
+
+Update the `<application>` tag to register `NpdApplication`:
+
+```xml
+<application
+    android:name=".NpdApplication"
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    ...>
 ```
 
 ---
