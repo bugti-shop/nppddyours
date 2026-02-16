@@ -40,7 +40,7 @@ export const PREMIUM_FEATURES = [
   'tasks_settings',
   'quick_add',
   'multiple_tasks',
-  'location_reminders',
+  
   'task_status',
   'view_mode_status_board',
   'view_mode_timeline',
