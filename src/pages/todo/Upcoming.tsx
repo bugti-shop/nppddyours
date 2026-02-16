@@ -131,14 +131,16 @@ const Upcoming = () => {
 
   const handleAddTask = async (task: Omit<TodoItem, 'id' | 'completed'>) => {
     const newItem: TodoItem = { id: Date.now().toString(), completed: false, ...task };
-    if (newItem.dueDate || newItem.reminderTime) {
-      try { await notificationManager.scheduleTaskReminder(newItem); } catch (error) { console.error('Failed to schedule notification:', error); }
-    }
+    // Add task to state/storage FIRST, schedule notifications in background
     const updatedAllItems = [newItem, ...allItems];
     setAllItems(updatedAllItems);
     await saveTodoItems(updatedAllItems);
     loadItems();
     
+    // Fire-and-forget notification scheduling
+    if (newItem.dueDate || newItem.reminderTime) {
+      notificationManager.scheduleTaskReminder(newItem).catch(error => console.error('Failed to schedule notification:', error));
+    }
   };
 
   const updateItem = async (itemId: string, updates: Partial<TodoItem>) => {
