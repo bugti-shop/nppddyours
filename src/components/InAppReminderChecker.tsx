@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 import { loadTasksFromDB } from '@/utils/taskStorage';
 import { getSetting, setSetting } from '@/utils/settingsStorage';
 import { Note } from '@/types/note';
+import { Capacitor } from '@capacitor/core';
 
 const CHECK_INTERVAL = 10_000; // Check every 10 seconds
 const FIRED_KEY = 'firedReminderIds';
@@ -15,6 +16,13 @@ export const InAppReminderChecker = () => {
   const intervalRef = useRef<ReturnType<typeof setInterval>>();
 
   useEffect(() => {
+    // On native platforms, system LocalNotifications handle push notifications
+    // This in-app poller is only needed for web where system notifications aren't reliable
+    if (Capacitor.isNativePlatform()) {
+      console.log('[InAppReminderChecker] Skipped — native platform uses system push notifications');
+      return;
+    }
+
     const checkReminders = async () => {
       try {
         const now = Date.now();
