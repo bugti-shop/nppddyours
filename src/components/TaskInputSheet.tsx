@@ -1545,6 +1545,13 @@ export const TaskInputSheet = ({ isOpen, onClose, onAddTask, folders, selectedFo
                   <Popover key={action.id} open={showLocationInput} onOpenChange={setShowLocationInput}>
                     <PopoverTrigger asChild>
                       <button
+                        onClick={(e) => {
+                          if (!requireFeature('location_reminders')) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return;
+                          }
+                        }}
                         className={cn(
                           "relative flex items-center gap-1.5 px-3 py-2 rounded-md border transition-all whitespace-nowrap",
                           locationReminder?.enabled ? "border-pink-500 bg-pink-50 dark:bg-pink-950/30" : 
