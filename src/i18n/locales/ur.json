@@ -2088,5 +2088,34 @@
   },
   "findReplace": {
     "back": "واپس", "title": "تلاش اور تبدیل", "find": "تلاش", "findPlaceholder": "تلاش کرنے کے لیے متن درج کریں...", "matchOf": "نتیجہ {{current}} از {{total}}", "replaceWith": "اس سے تبدیل کریں", "replacePlaceholder": "متبادل متن درج کریں...", "replaceNext": "اگلا تبدیل کریں", "replaceAll": "سب تبدیل کریں", "removeAllMatches": "تمام نتائج ہٹائیں", "clear": "صاف", "cleared": "صاف ہو گیا", "enterSearchTerm": "براہ کرم تلاش کی اصطلاح درج کریں", "foundMatches": "{{count}} نتائج ملے", "noMatchesFound": "کوئی نتائج نہیں ملے", "enterSearchFirst": "پہلے تلاش کی اصطلاح درج کریں", "noMatchesToReplace": "تبدیل کرنے کے لیے کوئی نتائج نہیں۔ پہلے تلاش پر کلک کریں۔", "replacedOccurrences": "{{count}} واقعات تبدیل ہوئے", "noMatchesToRemove": "ہٹانے کے لیے کوئی نتائج نہیں۔ پہلے تلاش پر کلک کریں۔", "removedOccurrences": "{{count}} واقعات ہٹائے گئے", "replacedOneRemaining": "1 تبدیل ہوا ({{count}} باقی)", "replacedLastMatch": "آخری نتیجہ تبدیل ہو گیا"
+  },
+  "onboarding": {
+    "paywall": {
+      "upgradeTitle": "Pro میں اپ گریڈ کریں",
+      "unlockAllFeatures": "تمام خصوصیات کھولیں",
+      "unlockAllFeaturesDesc": "ڈارک موڈ، ٹیمپلیٹس، سنک اور مزید",
+      "unlimitedEverything": "سب کچھ لامحدود",
+      "unlimitedEverythingDesc": "لامحدود فولڈرز، سیکشنز اور ویوز",
+      "proMember": "Pro ممبر",
+      "proMemberDesc": "تمام موجودہ اور مستقبل کی خصوصیات تک رسائی حاصل کریں",
+      "weekly": "ہفتہ وار",
+      "monthly": "ماہانہ",
+      "lifetime": "تاحیات",
+      "bestValue": "بہترین قیمت",
+      "continueWithWeekly": "{{price}} کے ساتھ جاری رکھیں",
+      "continueWithMonthly": "{{price}} کے ساتھ جاری رکھیں",
+      "getLifetime": "{{price}} میں تاحیات حاصل کریں",
+      "lifetimeNote": "ایک بار کی ادائیگی۔ مقام پر مبنی یاد دہانیاں یا مستقبل کی API خصوصیات شامل نہیں ہیں۔",
+      "processing": "پروسیسنگ...",
+      "restorePurchase": "خریداری بحال کریں",
+      "restoring": "بحال ہو رہا ہے...",
+      "accessCode": "ایکسیس کوڈ ہے؟",
+      "enterAccessCode": "ایکسیس کوڈ درج کریں",
+      "apply": "لاگو کریں",
+      "invalidCode": "غلط ایکسیس کوڈ",
+      "purchaseFailed": "خریداری ناکام۔ براہ کرم دوبارہ کوشش کریں۔",
+      "noPurchasesFound": "کوئی پچھلی خریداری نہیں ملی",
+      "restoreFailed": "خریداری بحال کرنے میں ناکامی"
+    }
   }
 }

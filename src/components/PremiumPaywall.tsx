@@ -118,39 +118,39 @@ export const PremiumPaywall = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto px-6">
-        <h1 className="text-3xl font-bold text-center mb-6">Upgrade to Pro</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">{t('onboarding.paywall.upgradeTitle')}</h1>
         
         {/* Feature timeline */}
         <div className="flex flex-col items-start mx-auto w-80 relative">
           <div className="absolute left-[10.5px] top-[20px] bottom-[20px] w-[11px] bg-primary/20 rounded-b-full"></div>
 
-          <div className="flex items-start gap-3 mb-6 relative">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0">
-              <Unlock size={16} strokeWidth={2} />
-            </div>
-            <div>
-              <p className="font-semibold">Unlock All Features</p>
-              <p className="text-gray-500 text-sm">Dark mode, templates, sync, and more</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3 mb-6 relative">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0">
-              <Bell size={16} strokeWidth={2} />
-            </div>
-            <div>
-              <p className="font-semibold">Unlimited Everything</p>
-              <p className="text-gray-500 text-sm">Unlimited folders, sections, and views</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3 relative">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0">
-              <Crown size={16} strokeWidth={2} />
-            </div>
-            <div>
-              <p className="font-semibold">Pro Member</p>
-              <p className="text-gray-500 text-sm">Get access to all current and future features</p>
-            </div>
-          </div>
+           <div className="flex items-start gap-3 mb-6 relative">
+             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0">
+               <Unlock size={16} strokeWidth={2} />
+             </div>
+             <div>
+               <p className="font-semibold">{t('onboarding.paywall.unlockAllFeatures')}</p>
+               <p className="text-muted-foreground text-sm">{t('onboarding.paywall.unlockAllFeaturesDesc')}</p>
+             </div>
+           </div>
+           <div className="flex items-start gap-3 mb-6 relative">
+             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0">
+               <Bell size={16} strokeWidth={2} />
+             </div>
+             <div>
+               <p className="font-semibold">{t('onboarding.paywall.unlimitedEverything')}</p>
+               <p className="text-muted-foreground text-sm">{t('onboarding.paywall.unlimitedEverythingDesc')}</p>
+             </div>
+           </div>
+           <div className="flex items-start gap-3 relative">
+             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground z-10 flex-shrink-0">
+               <Crown size={16} strokeWidth={2} />
+             </div>
+             <div>
+               <p className="font-semibold">{t('onboarding.paywall.proMember')}</p>
+               <p className="text-muted-foreground text-sm">{t('onboarding.paywall.proMemberDesc')}</p>
+             </div>
+           </div>
         </div>
 
         {/* Plan selection */}
@@ -158,35 +158,35 @@ export const PremiumPaywall = () => {
           <div className="flex gap-2 justify-center w-full">
             <button 
               onClick={() => { triggerHaptic('heavy'); setPlan('weekly'); }} 
-              className={`border-2 rounded-xl p-3 flex-1 text-center relative flex flex-col items-center justify-center min-h-[70px] ${plan === 'weekly' ? 'border-[#3c78f0]' : 'border-gray-200'}`}
+              className={`border-2 rounded-xl p-3 flex-1 text-center relative flex flex-col items-center justify-center min-h-[70px] ${plan === 'weekly' ? 'border-[#3c78f0]' : 'border-muted'}`}
             >
-              <p className="font-bold text-sm">Weekly</p>
-              <p className="text-gray-600 text-xs mt-0.5">{weeklyPrice}</p>
+              <p className="font-bold text-sm">{t('onboarding.paywall.weekly')}</p>
+              <p className="text-muted-foreground text-xs mt-0.5">{weeklyPrice}</p>
             </button>
 
             <button 
               onClick={() => { triggerHaptic('heavy'); setPlan('monthly'); }} 
-              className={`border-2 rounded-xl p-3 flex-1 text-center relative flex flex-col items-center justify-center min-h-[70px] ${plan === 'monthly' ? 'border-[#3c78f0] bg-gray-50' : 'border-gray-200'}`}
+              className={`border-2 rounded-xl p-3 flex-1 text-center relative flex flex-col items-center justify-center min-h-[70px] ${plan === 'monthly' ? 'border-[#3c78f0] bg-muted' : 'border-muted'}`}
             >
-              <p className="font-bold text-sm">Monthly</p>
-              <p className="text-gray-600 text-xs mt-0.5">{monthlyPrice}</p>
+              <p className="font-bold text-sm">{t('onboarding.paywall.monthly')}</p>
+              <p className="text-muted-foreground text-xs mt-0.5">{monthlyPrice}</p>
             </button>
 
             <button 
               onClick={() => { triggerHaptic('heavy'); setPlan('lifetime'); }} 
-              className={`border-2 rounded-xl p-3 flex-1 text-center relative flex flex-col items-center justify-center min-h-[70px] ${plan === 'lifetime' ? 'border-[#3c78f0]' : 'border-gray-200'}`}
+              className={`border-2 rounded-xl p-3 flex-1 text-center relative flex flex-col items-center justify-center min-h-[70px] ${plan === 'lifetime' ? 'border-[#3c78f0]' : 'border-muted'}`}
             >
               <span className="bg-[#3c78f0] text-white text-[10px] px-2 py-0.5 rounded-full absolute left-1/2 -translate-x-1/2 -top-2.5 whitespace-nowrap font-medium">
-                BEST VALUE
+                {t('onboarding.paywall.bestValue')}
               </span>
-              <p className="font-bold text-sm">Lifetime</p>
-              <p className="text-gray-600 text-xs mt-0.5">{lifetimePrice}</p>
+              <p className="font-bold text-sm">{t('onboarding.paywall.lifetime')}</p>
+              <p className="text-muted-foreground text-xs mt-0.5">{lifetimePrice}</p>
             </button>
           </div>
 
           {plan === 'lifetime' && (
-            <p className="text-gray-400 text-xs text-center max-w-xs mt-2">
-              One-time payment. Does not include Location Based Reminders or future API features.
+            <p className="text-muted-foreground text-xs text-center max-w-xs mt-2">
+              {t('onboarding.paywall.lifetimeNote')}
             </p>
           )}
 
@@ -196,10 +196,10 @@ export const PremiumPaywall = () => {
               disabled={isPurchasing}
               className="w-80 mt-4 btn-duo disabled:opacity-50"
             >
-              {isPurchasing ? 'Processing...' : (
-                plan === 'weekly' ? `Continue with ${weeklyPrice}` :
-                plan === 'monthly' ? `Continue with ${monthlyPrice}` :
-                `Get Lifetime for ${lifetimePrice}`
+              {isPurchasing ? t('onboarding.paywall.processing') : (
+                plan === 'weekly' ? t('onboarding.paywall.continueWithWeekly', { price: weeklyPrice }) :
+                plan === 'monthly' ? t('onboarding.paywall.continueWithMonthly', { price: monthlyPrice }) :
+                t('onboarding.paywall.getLifetime', { price: lifetimePrice })
               )}
             </button>
 
@@ -208,7 +208,7 @@ export const PremiumPaywall = () => {
               disabled={isRestoring}
               className="text-primary font-medium text-sm mt-2 disabled:opacity-50"
             >
-              {isRestoring ? 'Restoring...' : 'Restore Purchase'}
+              {isRestoring ? t('onboarding.paywall.restoring') : t('onboarding.paywall.restorePurchase')}
             </button>
 
             {/* Access Code */}
@@ -216,9 +216,9 @@ export const PremiumPaywall = () => {
               {!showAdminInput ? (
                 <button 
                   onClick={() => setShowAdminInput(true)}
-                  className="text-gray-400 text-xs underline"
+                  className="text-muted-foreground text-xs underline"
                 >
-                  Have an access code?
+                  {t('onboarding.paywall.accessCode')}
                 </button>
               ) : (
                 <div className="flex flex-col items-center gap-2">
@@ -230,19 +230,19 @@ export const PremiumPaywall = () => {
                         setAdminCode(e.target.value.slice(0, 20));
                         setAdminError('');
                       }}
-                      placeholder="Enter access code"
-                      className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-center text-sm focus:outline-none focus:border-primary"
+                      placeholder={t('onboarding.paywall.enterAccessCode')}
+                      className="flex-1 px-4 py-2 border border-muted rounded-lg text-center text-sm focus:outline-none focus:border-primary"
                       maxLength={20}
                     />
                     <button
                       onClick={handleAccessCode}
                       className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium"
                     >
-                      Apply
+                      {t('onboarding.paywall.apply')}
                     </button>
                   </div>
                   {adminError && (
-                    <p className="text-red-500 text-xs">{adminError}</p>
+                    <p className="text-destructive text-xs">{adminError}</p>
                   )}
                 </div>
               )}
