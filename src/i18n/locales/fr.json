@@ -1761,7 +1761,10 @@
       "weekly": "Se répète chaque semaine",
       "weekdays": "Lun-Ven uniquement",
       "monthly": "Se répète chaque mois"
-    }
+    },
+    "setReminderFor": "Définir un rappel pour {{count}} tâche(s)",
+    "clearReminder": "Supprimer le rappel",
+    "tasksSelected": "{{count}} tâche(s) sélectionnée(s)"
   },
   "menu": {
     "smartLists": "Listes Intelligentes",
@@ -2377,7 +2380,11 @@
     "completed": "Terminées",
     "completedToday": "Terminées Aujourd'hui",
     "completedYesterday": "Terminées Hier",
-    "older": "Plus anciennes"
+    "older": "Plus anciennes",
+    "notStarted": "Non commencé",
+    "inProgress": "En cours",
+    "almostDone": "Presque terminé",
+    "tasks": "Tâches"
   },
   "filters": {
     "hasDate": "A une Date d'Échéance",

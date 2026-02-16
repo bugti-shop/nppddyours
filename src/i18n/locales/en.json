@@ -1628,7 +1628,10 @@
       "weekly": "Repeats every week",
       "weekdays": "Mon-Fri only",
       "monthly": "Repeats every month"
-    }
+    },
+    "setReminderFor": "Set Reminder for {{count}} task(s)",
+    "clearReminder": "Clear Reminder",
+    "tasksSelected": "{{count}} task(s) selected"
   },
   "menu": {
     "smartLists": "Smart Lists",
@@ -2538,7 +2541,11 @@
     "completed": "Completed",
     "completedToday": "Completed Today",
     "completedYesterday": "Completed Yesterday",
-    "older": "Older"
+    "older": "Older",
+    "notStarted": "Not Started",
+    "inProgress": "In Progress",
+    "almostDone": "Almost Done",
+    "tasks": "Tasks"
   },
   "filters": {
     "hasDate": "Has Due Date",

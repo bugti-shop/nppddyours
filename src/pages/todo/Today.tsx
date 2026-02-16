@@ -70,8 +70,8 @@ import { TASK_CIRCLE, TASK_CHECK_ICON } from '@/utils/taskItemStyles';
 type ViewMode = 'flat' | 'kanban' | 'kanban-status' | 'timeline' | 'progress' | 'priority' | 'history';
 type SortBy = 'date' | 'priority' | 'name' | 'created';
 
-const defaultSections: TaskSection[] = [
-  { id: 'default', name: 'Tasks', color: '#3b82f6', isCollapsed: false, order: 0 }
+const getDefaultSections = (t: (key: string) => string): TaskSection[] => [
+  { id: 'default', name: t('grouping.tasks'), color: '#3b82f6', isCollapsed: false, order: 0 }
 ];
 
 const Today = () => {
@@ -81,7 +81,7 @@ const Today = () => {
   const { requireFeature, isPro } = useSubscription();
   const [items, setItems] = useState<TodoItem[]>([]);
   const [folders, setFolders] = useState<Folder[]>([]);
-  const [sections, setSections] = useState<TaskSection[]>(defaultSections);
+  const [sections, setSections] = useState<TaskSection[]>(getDefaultSections(t));
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
   const [isInputOpen, setIsInputOpen] = useState(false);
   const [inputSectionId, setInputSectionId] = useState<string | null>(null);
@@ -186,7 +186,7 @@ const Today = () => {
       }
 
       const savedSections = await getSetting<TaskSection[]>('todoSections', []);
-      setSections(savedSections.length > 0 ? savedSections : defaultSections);
+      setSections(savedSections.length > 0 ? savedSections : getDefaultSections(t));
 
       const savedShowCompleted = await getSetting<boolean>('todoShowCompleted', true);
       setShowCompleted(savedShowCompleted);
@@ -253,7 +253,7 @@ const Today = () => {
     const handleSectionsRestored = async () => {
       console.log('[Today] Sections restored from cloud, refreshing...');
       const savedSections = await getSetting<TaskSection[]>('todoSections', []);
-      setSections(savedSections.length > 0 ? savedSections : defaultSections);
+      setSections(savedSections.length > 0 ? savedSections : getDefaultSections(t));
     };
 
     // Listen for folders restored from cloud sync
@@ -1566,7 +1566,7 @@ const Today = () => {
                     item.status === 'almost_done' && "border-warning text-warning bg-warning/10"
                   )}
                 >
-                  {item.status === 'not_started' ? 'Not Started' : item.status === 'in_progress' ? 'In Progress' : 'Almost Done'}
+                  {item.status === 'not_started' ? t('grouping.notStarted') : item.status === 'in_progress' ? t('grouping.inProgress') : t('grouping.almostDone')}
                 </Badge>
               )}
             </div>
@@ -2190,11 +2190,11 @@ const Today = () => {
           </div>
           {isSelectionMode && selectedTaskIds.size > 0 && (
             <div className="fixed left-4 right-4 z-40 bg-card border rounded-lg shadow-lg p-4" style={{ bottom: 'calc(5rem + env(safe-area-inset-bottom, 0px))' }}>
-              <p className="text-sm mb-3 font-medium">{selectedTaskIds.size} task(s) selected</p>
+              <p className="text-sm mb-3 font-medium">{t('bulk.tasksSelected', { count: selectedTaskIds.size })}</p>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => setIsSelectActionsOpen(true)}>Actions</Button>
+                <Button variant="outline" size="sm" onClick={() => setIsSelectActionsOpen(true)}>{t('common.actions', 'Actions')}</Button>
                 <Button variant="outline" size="sm" onClick={() => { setItems(items.filter(i => !selectedTaskIds.has(i.id))); setSelectedTaskIds(new Set()); setIsSelectionMode(false); }}>
-                  <Trash2 className="h-4 w-4 mr-2" />Delete
+                  <Trash2 className="h-4 w-4 mr-2" />{t('common.delete')}
                 </Button>
               </div>
             </div>
@@ -2540,28 +2540,28 @@ const Today = () => {
                     const statusGroups: { id: TaskStatus; label: string; color: string; icon: React.ReactNode; tasks: TodoItem[] }[] = [
                       { 
                         id: 'not_started', 
-                        label: 'Not Started', 
+                        label: t('grouping.notStarted'), 
                         color: '#6b7280', 
                         icon: <Circle className="h-3.5 w-3.5" />,
                         tasks: uncompletedItems.filter(item => !item.status || item.status === 'not_started')
                       },
                       { 
                         id: 'in_progress', 
-                        label: 'In Progress', 
+                        label: t('grouping.inProgress'), 
                         color: '#3b82f6', 
                         icon: <Loader2 className="h-3.5 w-3.5" />,
                         tasks: uncompletedItems.filter(item => item.status === 'in_progress')
                       },
                       { 
                         id: 'almost_done', 
-                        label: 'Almost Done', 
+                        label: t('grouping.almostDone'), 
                         color: '#f59e0b', 
                         icon: <ClockIcon className="h-3.5 w-3.5" />,
                         tasks: uncompletedItems.filter(item => item.status === 'almost_done')
                       },
                       { 
                         id: 'completed', 
-                        label: 'Completed', 
+                        label: t('grouping.completed'), 
                         color: '#10b981', 
                         icon: <CheckCircle2 className="h-3.5 w-3.5" />,
                         tasks: completedItems
@@ -2711,12 +2711,12 @@ const Today = () => {
                   const noDateTasks = uncompletedItems.filter(item => !item.dueDate);
                   
                   const timelineGroups = [
-                    { id: 'timeline-overdue', label: 'Overdue', tasks: overdueTasks, color: '#ef4444', icon: <AlertCircle className="h-4 w-4" /> },
-                    { id: 'timeline-today', label: 'Today', tasks: todayTasks, color: '#3b82f6', icon: <Sun className="h-4 w-4" /> },
-                    { id: 'timeline-tomorrow', label: 'Tomorrow', tasks: tomorrowTasks, color: '#f59e0b', icon: <CalendarIcon2 className="h-4 w-4" /> },
-                    { id: 'timeline-thisweek', label: 'This Week', tasks: thisWeekTasks, color: '#10b981', icon: <CalendarIcon2 className="h-4 w-4" /> },
-                    { id: 'timeline-later', label: 'Later', tasks: laterTasks, color: '#8b5cf6', icon: <Clock className="h-4 w-4" /> },
-                    { id: 'timeline-nodate', label: 'No Date', tasks: noDateTasks, color: '#6b7280', icon: <CalendarX className="h-4 w-4" /> },
+                    { id: 'timeline-overdue', label: t('grouping.overdue'), tasks: overdueTasks, color: '#ef4444', icon: <AlertCircle className="h-4 w-4" /> },
+                    { id: 'timeline-today', label: t('grouping.today'), tasks: todayTasks, color: '#3b82f6', icon: <Sun className="h-4 w-4" /> },
+                    { id: 'timeline-tomorrow', label: t('grouping.tomorrow'), tasks: tomorrowTasks, color: '#f59e0b', icon: <CalendarIcon2 className="h-4 w-4" /> },
+                    { id: 'timeline-thisweek', label: t('grouping.thisWeek'), tasks: thisWeekTasks, color: '#10b981', icon: <CalendarIcon2 className="h-4 w-4" /> },
+                    { id: 'timeline-later', label: t('grouping.later'), tasks: laterTasks, color: '#8b5cf6', icon: <Clock className="h-4 w-4" /> },
+                    { id: 'timeline-nodate', label: t('grouping.noDate'), tasks: noDateTasks, color: '#6b7280', icon: <CalendarX className="h-4 w-4" /> },
                   ];
                   
                   return (
@@ -2804,9 +2804,9 @@ const Today = () => {
                   const almostDone = uncompletedItems.filter(item => item.subtasks && item.subtasks.length > 0 && item.subtasks.filter(st => st.completed).length >= item.subtasks.length * 0.75 && item.subtasks.some(st => !st.completed));
                   
                   const progressGroups = [
-                    { id: 'progress-notstarted', label: 'Not Started', tasks: notStarted.filter(t => !inProgress.includes(t) && !almostDone.includes(t)), color: '#6b7280', percent: '0%' },
-                    { id: 'progress-inprogress', label: 'In Progress', tasks: inProgress.filter(t => !almostDone.includes(t)), color: '#f59e0b', percent: '25-74%' },
-                    { id: 'progress-almostdone', label: 'Almost Done', tasks: almostDone, color: '#10b981', percent: '75%+' },
+                    { id: 'progress-notstarted', label: t('grouping.notStarted'), tasks: notStarted.filter(t => !inProgress.includes(t) && !almostDone.includes(t)), color: '#6b7280', percent: '0%' },
+                    { id: 'progress-inprogress', label: t('grouping.inProgress'), tasks: inProgress.filter(t => !almostDone.includes(t)), color: '#f59e0b', percent: '25-74%' },
+                    { id: 'progress-almostdone', label: t('grouping.almostDone'), tasks: almostDone, color: '#10b981', percent: '75%+' },
                   ];
                   
                   return (

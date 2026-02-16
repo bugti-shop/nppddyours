@@ -1735,7 +1735,10 @@
       "weekly": "חוזר כל שבוע",
       "weekdays": "שני-שישי בלבד",
       "monthly": "חוזר כל חודש"
-    }
+    },
+    "setReminderFor": "הגדר תזכורת ל-{{count}} משימות",
+    "clearReminder": "נקה תזכורת",
+    "tasksSelected": "{{count}} משימות נבחרו"
   },
   "menu": {
     "smartLists": "רשימות חכמות",
@@ -2331,7 +2334,11 @@
     "completed": "הושלם",
     "completedToday": "הושלם היום",
     "completedYesterday": "הושלם אתמול",
-    "older": "ישנים יותר"
+    "older": "ישנים יותר",
+    "notStarted": "לא התחיל",
+    "inProgress": "בתהליך",
+    "almostDone": "כמעט סיים",
+    "tasks": "משימות"
   },
   "filters": {
     "hasDate": "יש תאריך יעד",

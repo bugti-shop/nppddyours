@@ -1760,7 +1760,10 @@
       "weekly": "Repete toda semana",
       "weekdays": "Apenas Seg-Sex",
       "monthly": "Repete todo mês"
-    }
+    },
+    "setReminderFor": "Definir lembrete para {{count}} tarefa(s)",
+    "clearReminder": "Limpar lembrete",
+    "tasksSelected": "{{count}} tarefa(s) selecionada(s)"
   },
   "menu": {
     "smartLists": "Listas Inteligentes",
@@ -2433,7 +2436,11 @@
     "completed": "Concluídas",
     "completedToday": "Concluídas Hoje",
     "completedYesterday": "Concluídas Ontem",
-    "older": "Mais Antigas"
+    "older": "Mais Antigas",
+    "notStarted": "Não Iniciado",
+    "inProgress": "Em Progresso",
+    "almostDone": "Quase Pronto",
+    "tasks": "Tarefas"
   },
   "filters": {
     "hasDate": "Tem Data de Vencimento",

@@ -1610,7 +1610,10 @@
       "weekly": "毎週繰り返し",
       "weekdays": "月〜金のみ",
       "monthly": "毎月繰り返し"
-    }
+    },
+    "setReminderFor": "{{count}}件のタスクにリマインダーを設定",
+    "clearReminder": "リマインダーを消去",
+    "tasksSelected": "{{count}}件のタスクを選択中"
   },
   "menu": {
     "smartLists": "スマートリスト",
@@ -2348,7 +2351,11 @@
     "completed": "完了",
     "completedToday": "今日完了",
     "completedYesterday": "昨日完了",
-    "older": "以前"
+    "older": "以前",
+    "notStarted": "未着手",
+    "inProgress": "進行中",
+    "almostDone": "ほぼ完了",
+    "tasks": "タスク"
   },
   "filters": {
     "hasDate": "期限あり",

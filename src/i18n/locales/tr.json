@@ -1585,7 +1585,10 @@
       "weekly": "Her hafta tekrarlanır",
       "weekdays": "Sadece Pzt-Cum",
       "monthly": "Her ay tekrarlanır"
-    }
+    },
+    "setReminderFor": "{{count}} görev için hatırlatıcı ayarla",
+    "clearReminder": "Hatırlatıcıyı temizle",
+    "tasksSelected": "{{count}} görev seçildi"
   },
   "menu": {
     "smartLists": "Akıllı Listeler",
@@ -2323,7 +2326,11 @@
     "completed": "Tamamlandı",
     "completedToday": "Bugün Tamamlandı",
     "completedYesterday": "Dün Tamamlandı",
-    "older": "Daha Eski"
+    "older": "Daha Eski",
+    "notStarted": "Başlanmadı",
+    "inProgress": "Devam Ediyor",
+    "almostDone": "Neredeyse Bitti",
+    "tasks": "Görevler"
   },
   "filters": {
     "hasDate": "Vade Tarihi Var",
