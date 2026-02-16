@@ -202,7 +202,7 @@ export const TaskDateTimePage = ({
           {t('dateTime.cancel')}
         </Button>
         <h2 className="text-lg font-semibold">{t('dateTime.title')}</h2>
-        <Button variant="ghost" size="sm" onClick={handleSave}>
+        <Button variant="default" size="default" onClick={handleSave} className="min-w-[90px] min-h-[44px] z-50">
           <Check className="h-5 w-5 mr-1" />
           {t('dateTime.save')}
         </Button>
