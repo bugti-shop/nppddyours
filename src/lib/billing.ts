@@ -50,9 +50,9 @@ export const PRICING_DISPLAY = {
     displayPrice: '$5.99/mo',
   },
   lifetime: {
-    price: '$79.99',
+    price: '$10.99',
     period: 'lifetime',
-    displayPrice: '$79.99',
+    displayPrice: '$10.99',
     note: 'One-time payment',
   },
 } as const;
