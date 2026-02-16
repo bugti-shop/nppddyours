@@ -1032,7 +1032,13 @@
     "copyWithFormatting": "फ़ॉर्मेटिंग के साथ कॉपी करें",
     "copyAll": "सब कॉपी करें",
     "copiedWithFormatting": "फ़ॉर्मेटिंग के साथ कॉपी किया गया!",
-    "copyFormattingDesc": "अपनी शैलियाँ रखने के लिए कहीं भी पेस्ट करें"
+    "copyFormattingDesc": "अपनी शैलियाँ रखने के लिए कहीं भी पेस्ट करें",
+    "extractEmails": "ईमेल निकालें",
+    "extractPhones": "फ़ोन नंबर निकालें",
+    "extractUrls": "URL निकालें",
+    "extractHashtags": "हैशटैग निकालें",
+    "replaceContent": "सामग्री बदलें",
+    "copyToClipboard": "क्लिपबोर्ड पर कॉपी करें"
   },
   "notePin": {
     "setPin": "PIN सेट करें",

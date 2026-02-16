@@ -1105,7 +1105,13 @@
     "copyWithFormatting": "서식과 함께 복사",
     "copyAll": "전체 복사",
     "copiedWithFormatting": "서식과 함께 복사됨!",
-    "copyFormattingDesc": "어디든 붙여넣어 스타일을 유지하세요"
+    "copyFormattingDesc": "어디든 붙여넣어 스타일을 유지하세요",
+    "extractEmails": "이메일 추출",
+    "extractPhones": "전화번호 추출",
+    "extractUrls": "URL 추출",
+    "extractHashtags": "해시태그 추출",
+    "replaceContent": "내용 바꾸기",
+    "copyToClipboard": "클립보드에 복사"
   },
   "notePin": {
     "setPin": "PIN 설정",

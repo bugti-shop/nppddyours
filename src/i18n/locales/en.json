@@ -980,7 +980,13 @@
     "copyWithFormatting": "Copy with Formatting",
     "copyAll": "Copy All",
     "copiedWithFormatting": "Copied with formatting!",
-    "copyFormattingDesc": "Paste anywhere to keep your styles"
+    "copyFormattingDesc": "Paste anywhere to keep your styles",
+    "extractEmails": "Extract Emails",
+    "extractPhones": "Extract Phone Numbers",
+    "extractUrls": "Extract URLs",
+    "extractHashtags": "Extract Hashtags",
+    "replaceContent": "Replace Content",
+    "copyToClipboard": "Copy to Clipboard"
   },
   "notePin": {
     "setPin": "Set PIN",
