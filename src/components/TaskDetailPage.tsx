@@ -365,26 +365,22 @@ export const TaskDetailPage = ({
     setReminderOffset(data.reminder || '');
     setRepeatSettings(data.repeatSettings);
 
-    // Schedule notification
-    try {
-      const notificationIds = await notificationManager.scheduleTaskReminder(
-        updatedTask,
-        data.reminder,
-        data.repeatSettings
-      );
-      
+    // CLOSE SHEET FIRST — never block UI on native plugin calls
+    setShowDateTimePage(false);
+    toast.success(data.selectedDate ? t('taskDetailToasts.dateTimeReminderSaved') : t('taskDetailToasts.dateSaved'));
+
+    // Schedule notification in background (non-blocking)
+    notificationManager.scheduleTaskReminder(
+      updatedTask,
+      data.reminder,
+      data.repeatSettings
+    ).then(notificationIds => {
       if (notificationIds.length > 0) {
         onUpdate({ ...updatedTask, notificationIds });
-        toast.success(t('taskDetailToasts.dateTimeReminderSaved'));
-      } else if (data.selectedDate) {
-        toast.success(t('taskDetailToasts.dateSaved'));
       }
-    } catch (error) {
+    }).catch(error => {
       console.error('Error scheduling notification:', error);
-      toast.success(t('taskDetailToasts.dateSavedNoNotif'));
-    }
-
-    setShowDateTimePage(false);
+    });
   };
 
   const handleConvertToNote = () => {
