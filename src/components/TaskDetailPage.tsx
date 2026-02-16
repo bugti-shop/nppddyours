@@ -361,9 +361,20 @@ export const TaskDetailPage = ({
 
     onUpdate(updatedTask);
     
-    // Store reminder offset and repeat settings for notification scheduling
+    // Store reminder offset and repeat settings
     setReminderOffset(data.reminder || '');
     setRepeatSettings(data.repeatSettings);
+
+    // Schedule reminder in background (non-blocking)
+    if (updatedTask.reminderTime) {
+      import('@/utils/reminderScheduler').then(({ scheduleTaskReminder }) => {
+        scheduleTaskReminder(updatedTask.id, updatedTask.text, new Date(updatedTask.reminderTime!)).catch(console.warn);
+      });
+    } else {
+      import('@/utils/reminderScheduler').then(({ cancelTaskReminder }) => {
+        cancelTaskReminder(updatedTask.id).catch(console.warn);
+      });
+    }
 
     // CLOSE SHEET FIRST — never block UI on native plugin calls
     setShowDateTimePage(false);

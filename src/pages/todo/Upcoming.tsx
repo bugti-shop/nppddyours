@@ -131,13 +131,17 @@ const Upcoming = () => {
 
   const handleAddTask = async (task: Omit<TodoItem, 'id' | 'completed'>) => {
     const newItem: TodoItem = { id: Date.now().toString(), completed: false, ...task };
-    // Add task to state/storage FIRST, schedule notifications in background
     const updatedAllItems = [newItem, ...allItems];
     setAllItems(updatedAllItems);
     await saveTodoItems(updatedAllItems);
     loadItems();
     
-    // Notification scheduling removed
+    // Schedule reminder in background
+    if (newItem.reminderTime) {
+      import('@/utils/reminderScheduler').then(({ scheduleTaskReminder }) => {
+        scheduleTaskReminder(newItem.id, newItem.text, new Date(newItem.reminderTime!)).catch(console.warn);
+      });
+    }
   };
 
   const updateItem = async (itemId: string, updates: Partial<TodoItem>) => {

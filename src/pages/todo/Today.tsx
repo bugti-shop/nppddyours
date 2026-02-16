@@ -404,8 +404,12 @@ const Today = () => {
     }
     setInputSectionId(null);
 
-    // Notification scheduling removed
-    
+    // Schedule reminder in background (non-blocking)
+    if (newItem.reminderTime) {
+      import('@/utils/reminderScheduler').then(({ scheduleTaskReminder }) => {
+        scheduleTaskReminder(newItem.id, newItem.text, new Date(newItem.reminderTime!)).catch(console.warn);
+      });
+    }
   };
 
   const handleBatchAddTasks = async (taskTexts: string[], sectionId?: string, folderId?: string, priority?: Priority, dueDate?: Date) => {
@@ -567,7 +571,10 @@ const Today = () => {
       updatesWithTimestamp.completedAt = now;
       playCompletionSound();
       
-      // Auto-reminders cancellation removed
+      // Cancel reminder when task is completed
+      import('@/utils/reminderScheduler').then(({ cancelTaskReminder }) => {
+        cancelTaskReminder(itemId).catch(console.warn);
+      });
       // Record streak completion
       try {
         const streakResult = await recordCompletion(TASK_STREAK_KEY);
