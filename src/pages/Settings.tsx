@@ -861,6 +861,72 @@ const Settings = () => {
                 <p className="mt-1">✅ {t('settings.quickAddTaskHint', 'Tap "Add Task" to add a task without opening the app')}</p>
               </div>
             )}
+            
+            {/* Test Notification Button */}
+            <button
+              className="w-full p-3 rounded-lg bg-primary text-primary-foreground text-sm font-medium"
+              onClick={async () => {
+                try {
+                  const { Capacitor } = await import('@capacitor/core');
+                  console.log('[TEST] isNative:', Capacitor.isNativePlatform());
+                  
+                  if (!Capacitor.isNativePlatform()) {
+                    toast({ title: 'Only works on native device', variant: 'destructive' });
+                    return;
+                  }
+                  
+                  const { LocalNotifications } = await import('@capacitor/local-notifications');
+                  
+                  // Check permissions
+                  const perm = await LocalNotifications.checkPermissions();
+                  console.log('[TEST] Permission:', perm.display);
+                  
+                  if (perm.display !== 'granted') {
+                    const req = await LocalNotifications.requestPermissions();
+                    console.log('[TEST] Requested:', req.display);
+                    if (req.display !== 'granted') {
+                      toast({ title: 'Notification permission denied!', variant: 'destructive' });
+                      return;
+                    }
+                  }
+                  
+                  // Create channel
+                  try {
+                    await LocalNotifications.createChannel({
+                      id: 'test_channel',
+                      name: 'Test',
+                      importance: 5,
+                      visibility: 1,
+                      vibration: true,
+                    });
+                  } catch (e) { console.log('[TEST] Channel error:', e); }
+                  
+                  // Schedule in 3 seconds - NO smallIcon
+                  const testId = Math.floor(Math.random() * 90000) + 10000;
+                  await LocalNotifications.schedule({
+                    notifications: [{
+                      id: testId,
+                      title: '🔔 Test Notification',
+                      body: 'If you see this, notifications work! ID: ' + testId,
+                      channelId: 'test_channel',
+                      schedule: {
+                        at: new Date(Date.now() + 3000),
+                        allowWhileIdle: true,
+                      },
+                    }],
+                  });
+                  
+                  const pending = await LocalNotifications.getPending();
+                  console.log('[TEST] ✅ Scheduled! Pending:', pending.notifications.length);
+                  toast({ title: '✅ Test notification scheduled in 3 seconds! Check your notification bar.' });
+                } catch (err: any) {
+                  console.error('[TEST] ❌ Failed:', err);
+                  toast({ title: 'Failed: ' + (err?.message || String(err)), variant: 'destructive' });
+                }
+              }}
+            >
+              🔔 Test Notification (fires in 3s)
+            </button>
           </div>
         </DialogContent>
       </Dialog>
