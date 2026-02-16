@@ -127,19 +127,25 @@ This guide provides complete Android native code including:
 
 ---
 
-## Complete MainActivity.java (Google Sign-In + Notification Channels)
+## Complete MainActivity.java (Google Sign-In ONLY)
 
 **File:** `android/app/src/main/java/nota/npd/com/MainActivity.java`
 
-This single file handles **everything**: Google Sign-In (Capgo Social Login) and local notification channels (`npd_reminders` + `npd_general`). No separate Application class needed.
+> **⚠️ IMPORTANT: Notifications do NOT depend on MainActivity or AndroidManifest!**
+> 
+> The `@capacitor/local-notifications` plugin handles EVERYTHING automatically:
+> - Permission dialog (Android 13+ system "Allow / Don't Allow")
+> - Notification channels (created programmatically in JS via `ensureChannel()`)
+> - Boot receiver (auto-registered by the plugin)
+> - Scheduling, sounds, vibration — all handled by the plugin
+>
+> The ONLY reason we customize MainActivity is for **Google Sign-In** (Capgo Social Login plugin).
+> If you don't use Google Sign-In, you can use the default `BridgeActivity` with zero modifications.
 
 ```java
 package nota.npd.com;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -153,110 +159,52 @@ import ee.forgr.capacitor.social.login.ModifiedMainActivityForSocialLoginPlugin;
 /**
  * Main Activity for Npd App
  * 
- * Handles:
- * 1. Google Sign-In via Capgo Social Login plugin
- * 2. Local notification channels (npd_reminders, npd_general)
+ * ONLY handles Google Sign-In via Capgo Social Login plugin.
+ * 
+ * Notifications are handled ENTIRELY by @capacitor/local-notifications plugin:
+ * - Permission dialog: triggered from JS via LocalNotifications.requestPermissions()
+ * - Channels: created from JS via ensureChannel() in notifications.ts
+ * - Boot receiver: auto-registered by the plugin
+ * 
+ * If you don't use Google Sign-In, you can delete this file entirely
+ * and use the default BridgeActivity.
  */
 public class MainActivity extends BridgeActivity implements ModifiedMainActivityForSocialLoginPlugin {
     
     private static final String TAG = "MainActivity";
     
-    // ==================== LIFECYCLE ====================
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Register SocialLoginPlugin BEFORE calling super.onCreate()
         registerPlugin(SocialLoginPlugin.class);
         super.onCreate(savedInstanceState);
-        
-        // Create notification channels on app start
-        createNotificationChannels();
-        
-        Log.d(TAG, "onCreate: App started with Social Login + notification channels");
+        Log.d(TAG, "onCreate: App started with Social Login");
     }
-    
-    // ==================== GOOGLE SIGN-IN ====================
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
-        
-        // CRITICAL: Handle Google Sign-In result BEFORE calling super
-        // This ensures the SocialLogin plugin receives the result in release builds
-        boolean handled = false;
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode);
         
         if (requestCode >= GoogleProvider.REQUEST_AUTHORIZE_GOOGLE_MIN && 
             requestCode < GoogleProvider.REQUEST_AUTHORIZE_GOOGLE_MAX) {
-            Log.d(TAG, "Handling Google Sign-In result");
-            
             PluginHandle pluginHandle = getBridge().getPlugin("SocialLogin");
             if (pluginHandle != null) {
                 SocialLoginPlugin plugin = (SocialLoginPlugin) pluginHandle.getInstance();
                 if (plugin != null) {
                     plugin.handleGoogleLoginIntent(requestCode, data);
-                    handled = true;
-                    Log.d(TAG, "Google Sign-In result forwarded to plugin");
-                } else {
-                    Log.e(TAG, "SocialLoginPlugin instance is null");
                 }
-            } else {
-                Log.e(TAG, "SocialLogin plugin handle not found");
             }
         }
         
-        // Always call super to ensure Capacitor processes other results
         super.onActivityResult(requestCode, resultCode, data);
-        
-        if (!handled) {
-            Log.d(TAG, "Result not handled by SocialLogin, passed to Capacitor");
-        }
     }
     
-    /**
-     * Required by ModifiedMainActivityForSocialLoginPlugin interface.
-     */
     @Override
-    public void IHaveModifiedTheMainActivityForTheUseWithSocialLoginPlugin() {
-        // Empty implementation - confirms the interface is implemented
-    }
-    
-    // ==================== NOTIFICATION CHANNELS ====================
-    
-    /**
-     * Create notification channels for local notifications.
-     * Required for Android 8.0 (API 26) and above.
-     */
-    private void createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager manager = getSystemService(NotificationManager.class);
-
-            // High importance: sound + vibration + heads-up display
-            NotificationChannel reminders = new NotificationChannel(
-                "npd_reminders",
-                "Reminders",
-                NotificationManager.IMPORTANCE_HIGH
-            );
-            reminders.setDescription("Task, note, and habit reminders");
-            reminders.enableVibration(true);
-            reminders.enableLights(true);
-            manager.createNotificationChannel(reminders);
-
-            // Default importance for general notifications
-            NotificationChannel general = new NotificationChannel(
-                "npd_general",
-                "General",
-                NotificationManager.IMPORTANCE_DEFAULT
-            );
-            general.setDescription("General app notifications");
-            manager.createNotificationChannel(general);
-            
-            Log.d(TAG, "Notification channels created");
-        }
-    }
+    public void IHaveModifiedTheMainActivityForTheUseWithSocialLoginPlugin() {}
 }
 ```
 
-> **Note:** No `NpdApplication.java` or `android:name` attribute needed in AndroidManifest — everything runs from `MainActivity`.
+> **No notification code in MainActivity!** The `@capacitor/local-notifications` plugin 
+> creates channels, handles permissions, and schedules notifications — all from JavaScript.
 
 ---
 

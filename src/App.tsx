@@ -18,6 +18,7 @@ import { SyncConflictSheet } from "@/components/SyncConflictSheet";
 import { PersistentNotificationHandler } from "@/components/PersistentNotificationHandler";
 import { InAppReminderChecker } from "@/components/InAppReminderChecker";
 import { NotificationActionsHandler } from "@/components/NotificationActionsHandler";
+import { NotificationPermissionRequest } from "@/components/NotificationPermissionRequest";
 import { NavigationBackProvider } from "@/components/NavigationBackProvider";
 import { notificationManager } from "@/utils/notifications";
 import { persistentNotificationManager } from "@/utils/persistentNotification";
@@ -232,6 +233,7 @@ const AppContent = () => {
     <>
       <Toaster />
       <Sonner />
+      <NotificationPermissionRequest />
       <InAppReminderChecker />
       <SyncConflictSheet />
       <PremiumPaywall />
