@@ -16,7 +16,7 @@ import { downloadBackup, downloadData, restoreFromBackup } from '@/utils/dataBac
 import { createNativeBackup, isNativePlatform } from '@/utils/nativeBackup';
 import { BackupSuccessDialog } from '@/components/BackupSuccessDialog';
 import { getSetting, setSetting, getAllSettings, clearAllSettings } from '@/utils/settingsStorage';
-// Firebase API removed - using Local Notifications
+
 import { persistentNotificationManager } from '@/utils/persistentNotification';
 import { Switch } from '@/components/ui/switch';
 import { NoteTypeVisibilitySheet } from '@/components/NoteTypeVisibilitySheet';

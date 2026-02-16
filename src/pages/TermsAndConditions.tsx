@@ -132,7 +132,7 @@ const TermsAndConditions = () => {
         <section className="space-y-3">
           <h3 className="text-lg font-semibold">9. Third-Party Services</h3>
           <p className="text-muted-foreground leading-relaxed">
-            The App integrates with third-party services including Google Drive, Google Sign-In, RevenueCat, Mapbox, and Firebase. Your use of these services is subject to their respective terms of service and privacy policies. We are not responsible for the practices or content of third-party services.
+            The App integrates with third-party services including Google Drive, Google Sign-In, RevenueCat, and Mapbox. Your use of these services is subject to their respective terms of service and privacy policies. We are not responsible for the practices or content of third-party services.
           </p>
         </section>
 

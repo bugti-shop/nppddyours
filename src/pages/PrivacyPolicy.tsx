@@ -101,7 +101,7 @@ const PrivacyPolicy = () => {
             <li><strong>Google Sign-In:</strong> For authentication</li>
             <li><strong>RevenueCat:</strong> For subscription and payment management</li>
             <li><strong>Mapbox:</strong> For location-based reminder features</li>
-            <li><strong>Firebase:</strong> For push notifications and cloud functions</li>
+            
           </ul>
           <p className="text-muted-foreground leading-relaxed">
             Each third-party service has its own privacy policy governing the use of your information. We encourage you to review their respective privacy policies.
