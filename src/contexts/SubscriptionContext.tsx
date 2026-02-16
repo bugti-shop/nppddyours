@@ -67,6 +67,7 @@ export const FREE_LIMITS = {
   maxNoteFolders: 3,
   maxTaskFolders: 3,
   maxTaskSections: 1,
+  maxNotes: 10,
 };
 
 interface UnifiedBillingContextType {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useSubscription, FREE_LIMITS } from '@/contexts/SubscriptionContext';
 import { cn } from '@/lib/utils';
 import { Note, NoteType, Folder } from '@/types/note';
 import { NoteCard } from '@/components/NoteCard';
@@ -410,6 +410,11 @@ const Index = () => {
   };
 
   const handleCreateNote = (type: NoteType) => {
+    // Free users limited to 10 notes total (including archived and deleted)
+    if (!isPro && notes.length >= FREE_LIMITS.maxNotes) {
+      openPaywall('extra_notes');
+      return;
+    }
     setDefaultType(type);
     setSelectedNote(null);
     setIsEditorOpen(true);
@@ -440,8 +445,8 @@ const Index = () => {
   };
 
   const handleCreateFolder = (name: string, color: string) => {
-    // Free users limited to 1 folder
-    if (!isPro && folders.length >= 1) {
+    // Free users limited to 3 folders
+    if (!isPro && folders.length >= FREE_LIMITS.maxNoteFolders) {
       requireFeature('extra_folders');
       return;
     }
