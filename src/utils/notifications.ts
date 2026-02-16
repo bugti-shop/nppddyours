@@ -47,6 +47,7 @@ const getLocalNotifications = async () => {
 
 const CHANNEL_ID = 'npd_reminders';
 let channelCreated = false;
+let actionTypesRegistered = false;
 
 const ensureChannel = async (LN: any) => {
   if (channelCreated) return;
@@ -67,6 +68,42 @@ const ensureChannel = async (LN: any) => {
       console.warn('Failed to create notification channel:', err);
     }
     channelCreated = true; // Don't retry on failure
+  }
+};
+
+/**
+ * Register notification action types so system notifications show
+ * actionable buttons (Complete / Snooze) like TickTick / Todoist.
+ */
+const ensureActionTypes = async (LN: any) => {
+  if (actionTypesRegistered) return;
+  try {
+    await LN.registerActionTypes({
+      types: [
+        {
+          id: TASK_REMINDER_ACTION_TYPE_ID,
+          actions: [
+            { id: 'complete', title: 'Complete', destructive: false },
+            { id: 'snooze', title: 'Snooze', destructive: false },
+          ],
+        },
+        {
+          id: SNOOZE_ACTION_TYPE_ID,
+          actions: [
+            { id: 'snooze_5', title: '5 min', destructive: false },
+            { id: 'snooze_15', title: '15 min', destructive: false },
+            { id: 'snooze_1h', title: '1 hour', destructive: false },
+          ],
+        },
+      ],
+    });
+    actionTypesRegistered = true;
+    console.log('Notification action types registered');
+  } catch (err) {
+    if (!isNotImplementedError(err)) {
+      console.warn('Failed to register action types:', err);
+    }
+    actionTypesRegistered = true;
   }
 };
 
@@ -97,6 +134,11 @@ const scheduleLocalNotification = async (opts: {
       // Ensure notification channel exists (required for Android 8+)
       await ensureChannel(LN);
 
+      // Ensure action types are registered for buttons
+      await ensureActionTypes(LN);
+
+      const isTaskNotif = opts.extra?.type === 'task';
+
       await LN.schedule({
         notifications: [{
           title: opts.title,
@@ -109,6 +151,7 @@ const scheduleLocalNotification = async (opts: {
           },
           smallIcon: 'npd_notification_icon',
           extra: opts.extra,
+          ...(isTaskNotif ? { actionTypeId: TASK_REMINDER_ACTION_TYPE_ID } : {}),
         }],
       });
       console.log('Native notification scheduled:', notifId, 'at', opts.scheduledAt.toISOString());
@@ -183,10 +226,11 @@ export class NotificationManager {
         const permResult = await LN.requestPermissions();
         this.permissionGranted = permResult.display === 'granted';
         
-        // Create notification channel (required for Android 8+)
+        // Create notification channel & register action types
         await ensureChannel(LN);
+        await ensureActionTypes(LN);
 
-        // Listen for notification actions
+        // Listen for notification actions (Complete / Snooze buttons)
         await LN.addListener('localNotificationActionPerformed', (action) => {
           console.log('Notification action:', action.actionId);
           const data = action.notification.extra as NotificationData | undefined;
@@ -196,7 +240,19 @@ export class NotificationManager {
               window.dispatchEvent(new CustomEvent('completeTaskFromNotification', {
                 detail: { taskId: data.taskId }
               }));
+            } else if (action.actionId === 'snooze' || action.actionId === 'snooze_5' || action.actionId === 'snooze_15' || action.actionId === 'snooze_1h') {
+              // Map action to snooze duration
+              const snoozeMap: Record<string, SnoozeOption> = {
+                'snooze': '15min',
+                'snooze_5': '5min',
+                'snooze_15': '15min',
+                'snooze_1h': '1hour',
+              };
+              const snoozeOption = snoozeMap[action.actionId] || '15min';
+              // Re-schedule the notification
+              NotificationManager.getInstance().snoozeNotification(action.notification, snoozeOption);
             } else {
+              // Default tap - open the task
               window.dispatchEvent(new CustomEvent('taskNotificationTapped', {
                 detail: { taskId: data.taskId }
               }));
