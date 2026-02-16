@@ -2047,7 +2047,10 @@
     "syncFailed": "Sincronizzazione fallita",
     "pulledEvents": "Eventi importati",
     "noPulledEvents": "Nessun evento importato dal calendario",
-    "allDay": "Tutto il giorno"
+    "allDay": "Tutto il giorno",
+    "tapToEnable": "Tocca \"Sincronizza\" per attivare la sincronizzazione bidirezionale",
+    "twoWayDesc": "Sincronizzazione bidirezionale tra la tua app e il calendario di sistema",
+    "permissionDenied": "Autorizzazione calendario negata"
   },
   "remindersPage": {
     "title": "Promemoria",

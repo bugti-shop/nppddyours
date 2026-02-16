@@ -2101,7 +2101,10 @@
     "syncFailed": "Error de sincronización",
     "pulledEvents": "Eventos importados",
     "noPulledEvents": "No se importaron eventos del calendario",
-    "allDay": "Todo el día"
+    "allDay": "Todo el día",
+    "tapToEnable": "Toca \"Sincronizar\" para activar la sincronización bidireccional",
+    "twoWayDesc": "Sincronización bidireccional entre tu app y el calendario del sistema",
+    "permissionDenied": "Permiso de calendario denegado"
   },
   "remindersPage": {
     "title": "Recordatorios",

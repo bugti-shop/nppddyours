@@ -2003,7 +2003,10 @@
     "syncFailed": "Sync failed",
     "pulledEvents": "Pulled Events",
     "noPulledEvents": "No events pulled from device calendar",
-    "allDay": "All Day"
+    "allDay": "All Day",
+    "tapToEnable": "Tap \"Sync Now\" to enable two-way calendar sync",
+    "twoWayDesc": "Two-way sync between your app and system calendar",
+    "permissionDenied": "Calendar permission denied"
   },
   "remindersPage": {
     "title": "Reminders",

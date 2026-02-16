@@ -2073,7 +2073,10 @@
     "syncFailed": "Falha na sincronização",
     "pulledEvents": "Eventos importados",
     "noPulledEvents": "Nenhum evento importado do calendário",
-    "allDay": "Dia inteiro"
+    "allDay": "Dia inteiro",
+    "tapToEnable": "Toque em \"Sincronizar\" para ativar a sincronização bidirecional",
+    "twoWayDesc": "Sincronização bidirecional entre seu app e o calendário do sistema",
+    "permissionDenied": "Permissão de calendário negada"
   },
   "remindersPage": {
     "title": "Lembretes",

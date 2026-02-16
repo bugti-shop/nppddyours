@@ -1930,7 +1930,10 @@
     "syncFailed": "同期失敗",
     "pulledEvents": "取得したイベント",
     "noPulledEvents": "デバイスカレンダーからイベントが取得されませんでした",
-    "allDay": "終日"
+    "allDay": "終日",
+    "tapToEnable": "「今すぐ同期」をタップして双方向カレンダー同期を有効にする",
+    "twoWayDesc": "アプリとシステムカレンダー間の双方向同期",
+    "permissionDenied": "カレンダーの権限が拒否されました"
   },
   "remindersPage": {
     "title": "リマインダー",
