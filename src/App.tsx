@@ -156,7 +156,6 @@ const AppRoutes = () => {
         <TourNavigationListener />
         <PersistentNotificationHandler />
         <NotificationActionsHandler />
-        <InAppReminderChecker />
         <Suspense fallback={<EmptyFallback />}>
           <Routes>
             <Route path="/" element={<RootRedirect />} />
@@ -233,6 +232,7 @@ const AppContent = () => {
     <>
       <Toaster />
       <Sonner />
+      <InAppReminderChecker />
       <SyncConflictSheet />
       <PremiumPaywall />
       <WhatsNewSheet />
