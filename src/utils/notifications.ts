@@ -135,10 +135,19 @@ const scheduleLocalNotification = async (opts: {
     return notifId;
   }
 
-  // If the scheduled time is in the past, skip
-  if (schedDate.getTime() <= Date.now()) {
+  // If the scheduled time is more than 5 seconds in the past, skip
+  // Allow same-minute and near-future scheduling (within a few seconds tolerance)
+  const timeDiff = schedDate.getTime() - Date.now();
+  if (timeDiff < -5000) {
     console.warn('[Notification] Scheduled time is in the past, skipping:', schedDate.toISOString());
     return notifId;
+  }
+
+  // If the time is within the next 5 seconds or just passed, schedule 5 seconds from now
+  if (timeDiff < 5000) {
+    const adjusted = new Date(Date.now() + 5000);
+    console.log('[Notification] Adjusting near-past/immediate time to 5s from now:', adjusted.toISOString());
+    schedDate.setTime(adjusted.getTime());
   }
 
   const LN = await getLocalNotifications();

@@ -340,7 +340,7 @@ export const TaskDateTimePage = ({
                 {reminderOptions.find(o => o.value === reminder)?.label || t('dateTime.reminderOptions.instant')}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-popover">
+            <SelectContent className="bg-popover z-[9999]" position="popper" sideOffset={4}>
               {reminderOptions.map((opt) => (
                 <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
               ))}
