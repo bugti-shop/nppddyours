@@ -31,6 +31,8 @@ import Notes from "./pages/Notes";
 import NotesCalendar from "./pages/NotesCalendar";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 // Eager load main todo pages for instant navigation
 import Today from "./pages/todo/Today";
@@ -166,6 +168,8 @@ const AppRoutes = () => {
             <Route path="/todo/calendar" element={<TodoCalendar />} />
             <Route path="/todo/settings" element={<TodoSettings />} />
             <Route path="/todo/progress" element={<Progress />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
