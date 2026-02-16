@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react';
 import { getSetting, setSetting } from '@/utils/settingsStorage';
 import defaultLogo from '@/assets/app-logo.png';
 import sadLogo from '@/assets/sad-logo.png';
+import angryLogo from '@/assets/angry-logo.png';
 
 const LAST_OPEN_KEY = 'lastAppOpenTime';
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-const SAD_LOGO_DURATION_MS = 5000; // Show sad logo for 5 seconds
+const TWO_DAYS_MS = 2 * ONE_DAY_MS;
+const RETENTION_LOGO_DURATION_MS = 5000;
 
 /**
- * Returns the sad logo if the user hasn't opened the app in 24+ hours,
- * then switches back to the default logo after a few seconds.
+ * Shows different logos based on user absence:
+ * - 1 day away → sad logo (5s then default)
+ * - 2+ days away → angry logo (5s then default)
  */
 export const useRetentionLogo = () => {
   const [logo, setLogo] = useState(defaultLogo);
@@ -22,18 +25,19 @@ export const useRetentionLogo = () => {
       const lastOpen = await getSetting<number | null>(LAST_OPEN_KEY, null);
       const now = Date.now();
 
-      if (lastOpen && now - lastOpen >= ONE_DAY_MS) {
-        // User was away for 24h+ → show sad logo temporarily
-        setLogo(sadLogo);
-        setIsSad(true);
-
-        timer = setTimeout(() => {
-          setLogo(defaultLogo);
-          setIsSad(false);
-        }, SAD_LOGO_DURATION_MS);
+      if (lastOpen) {
+        const elapsed = now - lastOpen;
+        if (elapsed >= TWO_DAYS_MS) {
+          setLogo(angryLogo);
+          setIsSad(true);
+          timer = setTimeout(() => { setLogo(defaultLogo); setIsSad(false); }, RETENTION_LOGO_DURATION_MS);
+        } else if (elapsed >= ONE_DAY_MS) {
+          setLogo(sadLogo);
+          setIsSad(true);
+          timer = setTimeout(() => { setLogo(defaultLogo); setIsSad(false); }, RETENTION_LOGO_DURATION_MS);
+        }
       }
 
-      // Always update last open time
       await setSetting(LAST_OPEN_KEY, now);
     };
 
