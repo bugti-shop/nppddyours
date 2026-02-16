@@ -20,7 +20,7 @@ import { AppLockSetup } from '@/components/AppLockSetup';
 import { downloadBackup, downloadData, restoreFromBackup } from '@/utils/dataBackup';
 import { createNativeBackup, isNativePlatform } from '@/utils/nativeBackup';
 import { BackupSuccessDialog } from '@/components/BackupSuccessDialog';
-import { persistentNotificationManager } from '@/utils/persistentNotification';
+
 import { Capacitor } from '@capacitor/core';
 import appLogo from '@/assets/app-logo.png';
 import {
@@ -73,7 +73,6 @@ const TodoSettings = () => {
   const [noteRemindersEnabled, setNoteRemindersEnabled] = useState(true);
   const [dailyDigestEnabled, setDailyDigestEnabled] = useState(false);
   const [overdueAlertsEnabled, setOverdueAlertsEnabled] = useState(true);
-  const [persistentNotificationEnabled, setPersistentNotificationEnabled] = useState(false);
   const [calendarSyncEnabled, setCalendarSyncEnabled] = useState(false);
   const currentLanguage = languages.find(l => l.code === i18n.language) || languages[0];
 
@@ -83,7 +82,6 @@ const TodoSettings = () => {
     getSetting<boolean>('noteRemindersEnabled', true).then(setNoteRemindersEnabled);
     getSetting<boolean>('dailyDigestEnabled', false).then(setDailyDigestEnabled);
     getSetting<boolean>('overdueAlertsEnabled', true).then(setOverdueAlertsEnabled);
-    persistentNotificationManager.isEnabled().then(setPersistentNotificationEnabled);
     getSetting<boolean>('systemCalendarSyncEnabled', false).then(setCalendarSyncEnabled);
   }, []);
 
@@ -143,21 +141,6 @@ const TodoSettings = () => {
     }
   };
 
-  const handlePersistentNotificationToggle = async (enabled: boolean) => {
-    try {
-      if (enabled) {
-        await persistentNotificationManager.enable();
-        toast.success(t('settings.notificationBarEnabled', 'Quick Add notification enabled'));
-      } else {
-        await persistentNotificationManager.disable();
-        toast.success(t('settings.notificationBarDisabled', 'Quick Add notification disabled'));
-      }
-      setPersistentNotificationEnabled(enabled);
-    } catch (error) {
-      console.error('Error toggling persistent notification:', error);
-      toast.error(t('errors.notificationToggleFailed', 'Failed to toggle notification'));
-    }
-  };
 
   const handleBackupData = async () => {
     if (isBackingUp) return;
@@ -292,12 +275,6 @@ const TodoSettings = () => {
               value={currentLanguage.nativeName}
               onClick={() => setShowLanguageDialog(true)} 
             />
-            {Capacitor.isNativePlatform() && (
-              <SettingsRow 
-                label={<>{t('settings.quickAdd', 'Quick Add')} {!isPro && <Crown className="h-3.5 w-3.5 inline ml-1" style={{ color: '#3c78f0' }} />}</>}
-                onClick={() => { if (requireFeature('quick_add')) setShowQuickAddDialog(true); }} 
-              />
-            )}
             <SettingsRow 
               label={<>{t('settings.noteTypeVisibility', 'Note Type Visibility')} {!isPro && <Crown className="h-3.5 w-3.5 inline ml-1" style={{ color: '#3c78f0' }} />}</>}
               onClick={() => { if (requireFeature('notes_type_visibility')) setShowNoteTypeVisibilitySheet(true); }} 
@@ -493,36 +470,6 @@ const TodoSettings = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Quick Add Dialog */}
-      <Dialog open={showQuickAddDialog} onOpenChange={setShowQuickAddDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{t('settings.quickAdd', 'Quick Add')}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-lg border border-border">
-              <div className="flex flex-col gap-0.5">
-                <span className="text-foreground text-sm font-medium">
-                  {t('settings.notificationBar', 'Notification Bar')}
-                </span>
-                <span className="text-muted-foreground text-xs">
-                  {t('settings.notificationBarDesc', 'Add notes & tasks from notification')}
-                </span>
-              </div>
-              <Switch 
-                checked={persistentNotificationEnabled}
-                onCheckedChange={handlePersistentNotificationToggle}
-              />
-            </div>
-            {persistentNotificationEnabled && (
-              <div className="px-4 py-3 text-xs text-muted-foreground bg-muted/30 rounded-lg">
-                <p>📝 {t('settings.quickAddNoteHint')}</p>
-                <p className="mt-1">✅ {t('settings.quickAddTaskHint')}</p>
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>

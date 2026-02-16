@@ -22,7 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Search, Plus, StickyNote, FileText, FileEdit, Pen, ListTodo, Bell, Clock, Repeat, FileCode, GitBranch, Sun, Moon, Receipt, Star, ArrowUpDown, MoreVertical, FolderPlus, CheckSquare, Trash2, Archive, X, RotateCcw, Copy, Folder as FolderIcon, Eye, EyeOff, Mic, Type, LayoutTemplate, Crown } from 'lucide-react';
-import { getAllUpcomingReminders } from '@/utils/noteNotifications';
+
 import { format, isToday, isTomorrow, differenceInDays } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { useRetentionLogo } from '@/hooks/useRetentionLogo';
@@ -185,17 +185,7 @@ const Index = () => {
     setSetting('folders', folders);
   }, [folders]);
 
-  useEffect(() => {
-    const loadReminders = async () => {
-      const reminders = await getAllUpcomingReminders();
-      const remindersWithNotes = reminders.slice(0, 3).map(reminder => ({
-        ...reminder,
-        note: notes.find(note => note.id === reminder.noteId),
-      }));
-      setUpcomingReminders(remindersWithNotes);
-    };
-    loadReminders();
-  }, [notes]);
+  // Upcoming reminders loading removed
 
   // Auto-delete trash items older than 30 days
   useEffect(() => {

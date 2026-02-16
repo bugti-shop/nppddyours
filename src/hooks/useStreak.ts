@@ -23,7 +23,7 @@ import {
   updateChallengeProgress,
 } from '@/utils/gamificationStorage';
 import { updateGoalProgress } from '@/utils/weeklyGoalsStorage';
-import { scheduleGracePeriodWarning } from '@/utils/gamificationNotifications';
+
 import { playStreakMilestoneSound } from '@/utils/gamificationSounds';
 
 interface UseStreakOptions {
@@ -67,8 +67,6 @@ export const useStreak = (options: UseStreakOptions = {}): UseStreakReturn => {
   useEffect(() => {
     loadStreak();
     
-    // Schedule grace period warning if applicable
-    scheduleGracePeriodWarning().catch(console.error);
   }, [loadStreak]);
 
   // Listen for streak updates from other components

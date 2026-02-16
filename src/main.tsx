@@ -7,7 +7,6 @@ import { migrateLocalStorageToIndexedDB, getSetting } from "./utils/settingsStor
 import { migrateNotesToIndexedDB } from "./utils/noteStorage";
 import { startBackgroundScheduler } from "./utils/backgroundScheduler";
 import { initializeTaskOrder } from "./utils/taskOrderStorage";
-import { initializeNotificationHistory } from "./types/notificationHistory";
 import { initializeProtectionSettings } from "./utils/noteProtection";
 import { configureStatusBar } from "./utils/statusBar";
 
@@ -24,7 +23,6 @@ const AppWithMigration = () => {
           migrateLocalStorageToIndexedDB(),
           migrateNotesToIndexedDB(),
           initializeTaskOrder(),
-          initializeNotificationHistory(),
           initializeProtectionSettings(),
         ]);
         

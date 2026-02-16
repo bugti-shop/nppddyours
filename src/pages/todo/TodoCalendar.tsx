@@ -34,7 +34,7 @@ import { Calendar as CalendarIcon2 } from 'lucide-react';
 
 import { toast } from 'sonner';
 import { loadTodoItems, saveTodoItems } from '@/utils/todoItemsStorage';
-import { notificationManager } from '@/utils/notifications';
+
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { EventEditor } from '@/components/EventEditor';
 import { Card, CardContent } from '@/components/ui/card';
@@ -318,7 +318,7 @@ const TodoCalendar = () => {
       const updatedEvents = events.filter(e => e.id !== eventToDelete.id);
       setEvents(updatedEvents);
       await setSetting('calendarEvents', updatedEvents);
-      notificationManager.cancelTaskReminder(eventToDelete.id).catch(console.error);
+      // Notification cancellation removed
       toast.success(t('todayPage.eventDeleted'));
       setEventToDelete(null);
     }
@@ -344,51 +344,8 @@ const TodoCalendar = () => {
     window.dispatchEvent(new CustomEvent('calendarEventsUpdated'));
   };
 
-  const scheduleEventNotification = async (event: CalendarEvent) => {
-    try {
-      await notificationManager.cancelTaskReminder(event.id);
-      const getReminderOffset = (reminder: string): number => {
-        switch (reminder) {
-          case '5min': return 5 * 60 * 1000;
-          case '10min': return 10 * 60 * 1000;
-          case '15min': return 15 * 60 * 1000;
-          case '30min': return 30 * 60 * 1000;
-          case '1hour': return 60 * 60 * 1000;
-          case '1day': return 24 * 60 * 60 * 1000;
-          default: return 0;
-        }
-      };
-      const offset = getReminderOffset(event.reminder);
-      const now = new Date();
-      const futureLimit = new Date(now);
-      futureLimit.setMonth(futureLimit.getMonth() + 1);
-      const occurrences: Date[] = [];
-      let currentDate = new Date(event.startDate);
-      if (event.repeat === 'never') {
-        if (currentDate > now) occurrences.push(currentDate);
-      } else {
-        while (currentDate <= futureLimit) {
-          if (currentDate > now) occurrences.push(new Date(currentDate));
-          switch (event.repeat) {
-            case 'daily': currentDate = addDays(currentDate, 1); break;
-            case 'weekly': currentDate = addWeeks(currentDate, 1); break;
-            case 'monthly': currentDate = addMonths(currentDate, 1); break;
-            case 'yearly': currentDate = addMonths(currentDate, 12); break;
-            default: currentDate = futureLimit;
-          }
-        }
-      }
-      for (let i = 0; i < Math.min(occurrences.length, 10); i++) {
-        const occurrence = occurrences[i];
-        const reminderTime = new Date(occurrence.getTime() - offset);
-        if (reminderTime > now) {
-          const fakeTask: TodoItem = { id: `${event.id}-${i}`, text: event.title, completed: false, reminderTime, priority: 'medium' };
-          await notificationManager.scheduleTaskReminder(fakeTask);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to schedule event notification:', error);
-    }
+  const scheduleEventNotification = async (_event: CalendarEvent) => {
+    // Notification scheduling removed
   };
 
   const handleAddTask = async (task: Omit<TodoItem, 'id' | 'completed'>) => {
@@ -401,10 +358,7 @@ const TodoCalendar = () => {
     setTaskDates(allItems.filter(t => t.dueDate).map(t => new Date(t.dueDate!)));
     window.dispatchEvent(new Event('tasksUpdated'));
     
-    // Fire-and-forget notification scheduling
-    if (newItem.dueDate || newItem.reminderTime) {
-      notificationManager.scheduleTaskReminder(newItem).catch(error => console.error('Failed to schedule notification:', error));
-    }
+    // Notification scheduling removed
   };
 
   const handleCreateFolder = async (name: string, color: string) => {

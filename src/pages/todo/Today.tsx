@@ -35,7 +35,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 import { SubtaskDetailSheet } from '@/components/SubtaskDetailSheet';
 import { SmartListType, getSmartListFilter, useSmartLists } from '@/components/SmartListsDropdown';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
-import { notificationManager } from '@/utils/notifications';
+
 import { createNextRecurringTask } from '@/utils/recurringTasks';
 import { archiveCompletedTasks } from '@/utils/taskCleanup';
 import { startGeofenceWatching, hasLocationReminders } from '@/utils/geofencing';
@@ -174,7 +174,7 @@ const Today = () => {
       }
       
       setItems(loadedItems);
-      notificationManager.rescheduleAllTasks(loadedItems).catch(console.error);
+      // Notification rescheduling removed
     };
     loadAll();
 
@@ -404,13 +404,7 @@ const Today = () => {
     }
     setInputSectionId(null);
 
-    // Schedule notifications in background (fire-and-forget) - don't block task creation
-    const shouldSchedule = !!task.dueDate || !!task.reminderTime;
-    if (shouldSchedule) {
-      notificationManager.scheduleTaskReminder(newItem).catch(error => console.error('Failed to schedule notification:', error));
-    } else {
-      notificationManager.scheduleAutoReminders(newItem).catch(error => console.error('Failed to schedule auto-reminders:', error));
-    }
+    // Notification scheduling removed
     
   };
 
@@ -573,8 +567,7 @@ const Today = () => {
       updatesWithTimestamp.completedAt = now;
       playCompletionSound();
       
-      // Cancel auto-reminders when task is completed
-      try { await notificationManager.cancelAutoReminders(itemId); } catch {}
+      // Auto-reminders cancellation removed
       // Record streak completion
       try {
         const streakResult = await recordCompletion(TASK_STREAK_KEY);

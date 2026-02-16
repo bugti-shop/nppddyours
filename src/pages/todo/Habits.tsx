@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { TodoBottomNavigation } from '@/components/TodoBottomNavigation';
 import { Habit, HabitFrequency } from '@/types/habit';
 import { loadHabits, saveHabit, deleteHabit, calculateStreak, getCompletionRate, getWeeklyChartData } from '@/utils/habitStorage';
-import { scheduleHabitReminder, cancelHabitReminder } from '@/utils/habitNotifications';
+
 import { triggerHaptic } from '@/utils/haptics';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from 'recharts';
 
@@ -100,12 +100,7 @@ const Habits = () => {
 
     await saveHabit(habit);
 
-    // Schedule reminder notifications
-    if (habit.reminder?.enabled) {
-      const ids = await scheduleHabitReminder(habit);
-      habit.reminder.notificationIds = ids;
-      await saveHabit(habit);
-    }
+    // Habit reminder scheduling removed
 
     setShowAddSheet(false);
     resetForm();
@@ -430,11 +425,9 @@ const Habits = () => {
                   updatedAt: new Date().toISOString(),
                 };
                 if (enabled) {
-                  await cancelHabitReminder(habit);
-                  const ids = await scheduleHabitReminder(updated);
-                  updated.reminder!.notificationIds = ids;
+                  // Habit reminder scheduling removed
                 } else {
-                  await cancelHabitReminder(habit);
+                  // Habit reminder cancellation removed
                 }
                 await saveHabit(updated);
                 await loadData();

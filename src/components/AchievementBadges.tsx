@@ -10,7 +10,7 @@ import {
   AchievementsData,
 } from '@/utils/gamificationStorage';
 import { playAchievementSound } from '@/utils/gamificationSounds';
-import { showAchievementNotification } from '@/utils/gamificationNotifications';
+
 import Confetti from 'react-confetti';
 
 interface AchievementBadgesProps {
@@ -50,8 +50,7 @@ export const AchievementBadges = ({ compact = false }: AchievementBadgesProps) =
       // Play sound
       playAchievementSound();
       
-      // Show push notification
-      showAchievementNotification(achievement.name, achievement.xpReward);
+      // Achievement unlocked!
       
       setTimeout(() => {
         setUnlockedAchievement(null);

@@ -17,7 +17,7 @@ import { createNativeBackup, isNativePlatform } from '@/utils/nativeBackup';
 import { BackupSuccessDialog } from '@/components/BackupSuccessDialog';
 import { getSetting, setSetting, getAllSettings, clearAllSettings } from '@/utils/settingsStorage';
 
-import { persistentNotificationManager } from '@/utils/persistentNotification';
+
 import { Switch } from '@/components/ui/switch';
 import { NoteTypeVisibilitySheet } from '@/components/NoteTypeVisibilitySheet';
 import { NotesSettingsSheet } from '@/components/NotesSettingsSheet';
@@ -75,53 +75,13 @@ const Settings = () => {
   const [isBackingUp, setIsBackingUp] = useState(false);
   const toolbarOrder = useToolbarOrder();
   
-  const [showNotificationsExpanded, setShowNotificationsExpanded] = useState(false);
   const [hapticIntensity, setHapticIntensity] = useState<'off' | 'light' | 'medium' | 'heavy'>('medium');
   const [isRestoring, setIsRestoring] = useState(false);
-  const [persistentNotificationEnabled, setPersistentNotificationEnabled] = useState(false);
-  
-  // Notification settings
-  const [taskRemindersEnabled, setTaskRemindersEnabled] = useState(true);
-  const [noteRemindersEnabled, setNoteRemindersEnabled] = useState(true);
-  const [dailyDigestEnabled, setDailyDigestEnabled] = useState(false);
-  const [overdueAlertsEnabled, setOverdueAlertsEnabled] = useState(true);
-
-
-
 
   // Load settings from IndexedDB
   useEffect(() => {
     getSetting<'off' | 'light' | 'medium' | 'heavy'>('haptic_intensity', 'medium').then(setHapticIntensity);
-    persistentNotificationManager.isEnabled().then(setPersistentNotificationEnabled);
-    
-    // Load notification settings
-    getSetting<boolean>('taskRemindersEnabled', true).then(setTaskRemindersEnabled);
-    getSetting<boolean>('noteRemindersEnabled', true).then(setNoteRemindersEnabled);
-    getSetting<boolean>('dailyDigestEnabled', false).then(setDailyDigestEnabled);
-    getSetting<boolean>('overdueAlertsEnabled', true).then(setOverdueAlertsEnabled);
-
-
-
   }, []);
-
-  const handlePersistentNotificationToggle = async (enabled: boolean) => {
-    try {
-      if (enabled) {
-        await persistentNotificationManager.enable();
-        toast({ title: t('settings.notificationBarEnabled', 'Quick Add notification enabled') });
-      } else {
-        await persistentNotificationManager.disable();
-        toast({ title: t('settings.notificationBarDisabled', 'Quick Add notification disabled') });
-      }
-      setPersistentNotificationEnabled(enabled);
-    } catch (error) {
-      console.error('Error toggling persistent notification:', error);
-      toast({ 
-        title: t('errors.notificationToggleFailed', 'Failed to toggle notification'), 
-        variant: 'destructive' 
-      });
-    }
-  };
 
   const currentLanguage = languages.find(l => l.code === i18n.language) || languages[0];
 
@@ -133,30 +93,6 @@ const Settings = () => {
     setShowLanguageDialog(false);
   };
 
-  // Notification toggle handlers
-  const handleTaskRemindersToggle = async (enabled: boolean) => {
-    setTaskRemindersEnabled(enabled);
-    await setSetting('taskRemindersEnabled', enabled);
-    toast({ title: enabled ? t('settings.taskRemindersEnabled', 'Task reminders enabled') : t('settings.taskRemindersDisabled', 'Task reminders disabled') });
-  };
-
-  const handleNoteRemindersToggle = async (enabled: boolean) => {
-    setNoteRemindersEnabled(enabled);
-    await setSetting('noteRemindersEnabled', enabled);
-    toast({ title: enabled ? t('settings.noteRemindersEnabled', 'Note reminders enabled') : t('settings.noteRemindersDisabled', 'Note reminders disabled') });
-  };
-
-  const handleDailyDigestToggle = async (enabled: boolean) => {
-    setDailyDigestEnabled(enabled);
-    await setSetting('dailyDigestEnabled', enabled);
-    toast({ title: enabled ? t('settings.dailyDigestEnabled', 'Daily digest enabled') : t('settings.dailyDigestDisabled', 'Daily digest disabled') });
-  };
-
-  const handleOverdueAlertsToggle = async (enabled: boolean) => {
-    setOverdueAlertsEnabled(enabled);
-    await setSetting('overdueAlertsEnabled', enabled);
-    toast({ title: enabled ? t('settings.overdueAlertsEnabled', 'Overdue alerts enabled') : t('settings.overdueAlertsDisabled', 'Overdue alerts disabled') });
-  };
 
   const [notes, setNotes] = useState<Note[]>([]);
 
@@ -388,81 +324,12 @@ const Settings = () => {
             <SettingsRow label={t('settings.appearance')} onClick={() => setShowThemeDialog(true)} />
             <SettingsRow label={t('settings.language')} onClick={() => setShowLanguageDialog(true)} />
             
-            {Capacitor.isNativePlatform() && (
-              <SettingsRow label={<>{t('settings.quickAdd', 'Quick Add')} {!isProSub && <Crown className="h-3.5 w-3.5 inline ml-1" style={{ color: '#3c78f0' }} />}</>} onClick={() => { if (requireFeature('quick_add')) setShowQuickAddDialog(true); }} />
-            )}
             <SettingsRow label={<>{t('settings.noteTypeVisibility', 'Note Type Visibility')} {!isProSub && <Crown className="h-3.5 w-3.5 inline ml-1" style={{ color: '#3c78f0' }} />}</>} onClick={() => { if (requireFeature('notes_type_visibility')) setShowNoteTypeVisibilitySheet(true); }} />
             <SettingsRow label={<>{t('settings.notesSettings', 'Notes Settings')} {!isProSub && <Crown className="h-3.5 w-3.5 inline ml-1" style={{ color: '#3c78f0' }} />}</>} onClick={() => { if (requireFeature('notes_settings')) setShowNotesSettingsSheet(true); }} />
             <SettingsRow label={<>{t('settings.tasksSettings', 'Tasks Settings')} {!isProSub && <Crown className="h-3.5 w-3.5 inline ml-1" style={{ color: '#3c78f0' }} />}</>} onClick={() => { if (requireFeature('tasks_settings')) setShowTasksSettingsSheet(true); }} />
             <SettingsRow label={<>{t('settings.customizeNavigation', 'Customize Navigation')} {!isProSub && <Crown className="h-3.5 w-3.5 inline ml-1" style={{ color: '#3c78f0' }} />}</>} onClick={() => { if (requireFeature('customize_navigation')) setShowCustomizeNavigationSheet(true); }} />
           </div>
 
-          {/* Notifications Section */}
-          <div className="border border-border rounded-lg overflow-hidden" data-tour="settings-notifications">
-            <SectionHeading title={t('settings.notifications', 'Notifications')} />
-            <button
-              onClick={() => setShowNotificationsExpanded(!showNotificationsExpanded)}
-              className="w-full flex items-center justify-between px-4 py-3 border-b border-border hover:bg-muted transition-colors"
-            >
-              <span className="text-foreground text-sm">{t('settings.notificationSettings', 'Notification Settings')}</span>
-              <ChevronRight className={cn("h-4 w-4 text-muted-foreground transition-transform", showNotificationsExpanded && "rotate-90")} />
-            </button>
-            
-            {showNotificationsExpanded && (
-              <div className="bg-muted/30">
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
-                  <div className="flex-1 pr-4">
-                    <span className="text-foreground text-sm block">{t('settings.taskReminders', 'Task Reminders')}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {t('settings.taskRemindersDesc', 'Receive notifications for task due dates')}
-                    </span>
-                  </div>
-                  <Switch
-                    checked={taskRemindersEnabled}
-                    onCheckedChange={handleTaskRemindersToggle}
-                  />
-                </div>
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
-                  <div className="flex-1 pr-4">
-                    <span className="text-foreground text-sm block">{t('settings.noteReminders', 'Note Reminders')}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {t('settings.noteRemindersDesc', 'Receive notifications for note reminders')}
-                    </span>
-                  </div>
-                  <Switch
-                    checked={noteRemindersEnabled}
-                    onCheckedChange={handleNoteRemindersToggle}
-                  />
-                </div>
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
-                  <div className="flex-1 pr-4">
-                    <span className="text-foreground text-sm block">{t('settings.dailyDigest', 'Daily Digest')}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {t('settings.dailyDigestDesc', 'Morning summary of today\'s tasks')}
-                    </span>
-                  </div>
-                  <Switch
-                    checked={dailyDigestEnabled}
-                    onCheckedChange={handleDailyDigestToggle}
-                  />
-                </div>
-                <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
-                  <div className="flex-1 pr-4">
-                    <span className="text-foreground text-sm block">{t('settings.overdueAlerts', 'Overdue Alerts')}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {t('settings.overdueAlertsDesc', 'Get notified about overdue tasks')}
-                    </span>
-                  </div>
-                  <Switch
-                    checked={overdueAlertsEnabled}
-                    onCheckedChange={handleOverdueAlertsToggle}
-                  />
-                </div>
-
-
-              </div>
-            )}
-          </div>
 
           {/* Security Section */}
           <div className="border border-border rounded-lg overflow-hidden" data-tour="settings-security">
@@ -834,102 +701,6 @@ const Settings = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Quick Add Dialog (for native platforms) */}
-      <Dialog open={showQuickAddDialog} onOpenChange={setShowQuickAddDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>{t('settings.quickAdd', 'Quick Add')}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 rounded-lg border border-border">
-              <div className="flex flex-col gap-0.5">
-                <span className="text-foreground text-sm font-medium">
-                  {t('settings.notificationBar', 'Notification Bar')}
-                </span>
-                <span className="text-muted-foreground text-xs">
-                  {t('settings.notificationBarDesc', 'Add notes & tasks from notification')}
-                </span>
-              </div>
-              <Switch 
-                checked={persistentNotificationEnabled}
-                onCheckedChange={handlePersistentNotificationToggle}
-              />
-            </div>
-            {persistentNotificationEnabled && (
-              <div className="px-4 py-3 text-xs text-muted-foreground bg-muted/30 rounded-lg">
-                <p>📝 {t('settings.quickAddNoteHint', 'Tap "Add Note" to quickly create any note type (Text, Lined, Sticky, or Code)')}</p>
-                <p className="mt-1">✅ {t('settings.quickAddTaskHint', 'Tap "Add Task" to add a task without opening the app')}</p>
-              </div>
-            )}
-            
-            {/* Test Notification Button */}
-            <button
-              className="w-full p-3 rounded-lg bg-primary text-primary-foreground text-sm font-medium"
-              onClick={async () => {
-                try {
-                  const { Capacitor } = await import('@capacitor/core');
-                  console.log('[TEST] isNative:', Capacitor.isNativePlatform());
-                  
-                  if (!Capacitor.isNativePlatform()) {
-                    toast({ title: 'Only works on native device', variant: 'destructive' });
-                    return;
-                  }
-                  
-                  const { LocalNotifications } = await import('@capacitor/local-notifications');
-                  
-                  // Check permissions
-                  const perm = await LocalNotifications.checkPermissions();
-                  console.log('[TEST] Permission:', perm.display);
-                  
-                  if (perm.display !== 'granted') {
-                    const req = await LocalNotifications.requestPermissions();
-                    console.log('[TEST] Requested:', req.display);
-                    if (req.display !== 'granted') {
-                      toast({ title: 'Notification permission denied!', variant: 'destructive' });
-                      return;
-                    }
-                  }
-                  
-                  // Create channel
-                  try {
-                    await LocalNotifications.createChannel({
-                      id: 'test_channel',
-                      name: 'Test',
-                      importance: 5,
-                      visibility: 1,
-                      vibration: true,
-                    });
-                  } catch (e) { console.log('[TEST] Channel error:', e); }
-                  
-                  // Schedule in 3 seconds - NO smallIcon
-                  const testId = Math.floor(Math.random() * 90000) + 10000;
-                  await LocalNotifications.schedule({
-                    notifications: [{
-                      id: testId,
-                      title: '🔔 Test Notification',
-                      body: 'If you see this, notifications work! ID: ' + testId,
-                      channelId: 'test_channel',
-                      schedule: {
-                        at: new Date(Date.now() + 3000),
-                        allowWhileIdle: true,
-                      },
-                    }],
-                  });
-                  
-                  const pending = await LocalNotifications.getPending();
-                  console.log('[TEST] ✅ Scheduled! Pending:', pending.notifications.length);
-                  toast({ title: '✅ Test notification scheduled in 3 seconds! Check your notification bar.' });
-                } catch (err: any) {
-                  console.error('[TEST] ❌ Failed:', err);
-                  toast({ title: 'Failed: ' + (err?.message || String(err)), variant: 'destructive' });
-                }
-              }}
-            >
-              🔔 Test Notification (fires in 3s)
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* Note Type Visibility Sheet */}
       <NoteTypeVisibilitySheet
