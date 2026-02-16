@@ -1766,7 +1766,10 @@
       "weekly": "Se repite cada semana",
       "weekdays": "Solo Lun-Vie",
       "monthly": "Se repite cada mes"
-    }
+    },
+    "setReminderFor": "Establecer recordatorio para {{count}} tarea(s)",
+    "clearReminder": "Borrar recordatorio",
+    "tasksSelected": "{{count}} tarea(s) seleccionada(s)"
   },
   "menu": {
     "smartLists": "Listas Inteligentes",
@@ -2377,7 +2380,11 @@
     "completed": "Completadas",
     "completedToday": "Completadas Hoy",
     "completedYesterday": "Completadas Ayer",
-    "older": "Anteriores"
+    "older": "Anteriores",
+    "notStarted": "Sin Empezar",
+    "inProgress": "En Progreso",
+    "almostDone": "Casi Listo",
+    "tasks": "Tareas"
   },
   "filters": {
     "hasDate": "Tiene Fecha de Vencimiento",

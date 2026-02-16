@@ -1762,7 +1762,10 @@
       "weekly": "Wöchentlich wiederholen",
       "weekdays": "Nur Mo-Fr",
       "monthly": "Monatlich wiederholen"
-    }
+    },
+    "setReminderFor": "Erinnerung für {{count}} Aufgabe(n) setzen",
+    "clearReminder": "Erinnerung löschen",
+    "tasksSelected": "{{count}} Aufgabe(n) ausgewählt"
   },
   "menu": {
     "smartLists": "Intelligente Listen",
@@ -2378,7 +2381,11 @@
     "completed": "Erledigt",
     "completedToday": "Heute Erledigt",
     "completedYesterday": "Gestern Erledigt",
-    "older": "Ältere"
+    "older": "Ältere",
+    "notStarted": "Nicht begonnen",
+    "inProgress": "In Bearbeitung",
+    "almostDone": "Fast fertig",
+    "tasks": "Aufgaben"
   },
   "filters": {
     "hasDate": "Hat Fälligkeitsdatum",

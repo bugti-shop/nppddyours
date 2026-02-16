@@ -1050,7 +1050,10 @@
       "weekly": "ہر ہفتے دہرایا جاتا ہے",
       "weekdays": "صرف پیر-جمعہ",
       "monthly": "ہر مہینے دہرایا جاتا ہے"
-    }
+    },
+    "setReminderFor": "{{count}} ٹاسک کے لیے یاد دہانی سیٹ کریں",
+    "clearReminder": "یاد دہانی صاف کریں",
+    "tasksSelected": "{{count}} ٹاسک منتخب"
   },
   "menu": {
     "smartLists": "سمارٹ فہرستیں",
@@ -1909,7 +1912,11 @@
     "completed": "مکمل",
     "completedToday": "آج مکمل",
     "completedYesterday": "کل مکمل",
-    "older": "پرانے"
+    "older": "پرانے",
+    "notStarted": "شروع نہیں ہوا",
+    "inProgress": "جاری ہے",
+    "almostDone": "تقریباً مکمل",
+    "tasks": "ٹاسک"
   },
   "filters": {
     "hasDate": "تاریخ موجود ہے",

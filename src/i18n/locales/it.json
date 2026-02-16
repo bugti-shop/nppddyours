@@ -1727,7 +1727,10 @@
       "weekly": "Si ripete ogni settimana",
       "weekdays": "Solo Lun-Ven",
       "monthly": "Si ripete ogni mese"
-    }
+    },
+    "setReminderFor": "Imposta promemoria per {{count}} attività",
+    "clearReminder": "Cancella promemoria",
+    "tasksSelected": "{{count}} attività selezionate"
   },
   "menu": {
     "smartLists": "Liste intelligenti",
@@ -2323,7 +2326,11 @@
     "completed": "Completate",
     "completedToday": "Completate oggi",
     "completedYesterday": "Completate ieri",
-    "older": "Più vecchie"
+    "older": "Più vecchie",
+    "notStarted": "Non iniziato",
+    "inProgress": "In corso",
+    "almostDone": "Quasi fatto",
+    "tasks": "Attività"
   },
   "filters": {
     "hasDate": "Ha data di scadenza",

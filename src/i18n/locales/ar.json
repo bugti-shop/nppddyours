@@ -1760,7 +1760,10 @@
       "weekly": "يتكرر كل أسبوع",
       "weekdays": "الاثنين-الجمعة فقط",
       "monthly": "يتكرر كل شهر"
-    }
+    },
+    "setReminderFor": "تعيين تذكير لـ {{count}} مهمة",
+    "clearReminder": "مسح التذكير",
+    "tasksSelected": "تم تحديد {{count}} مهمة"
   },
   "menu": {
     "smartLists": "القوائم الذكية",
@@ -2499,7 +2502,11 @@
     "completed": "مكتملة",
     "completedToday": "مكتملة اليوم",
     "completedYesterday": "مكتملة أمس",
-    "older": "أقدم"
+    "older": "أقدم",
+    "notStarted": "لم يبدأ",
+    "inProgress": "قيد التنفيذ",
+    "almostDone": "شارف على الانتهاء",
+    "tasks": "المهام"
   },
   "filters": {
     "hasDate": "لديها تاريخ استحقاق",

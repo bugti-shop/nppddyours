@@ -1727,7 +1727,10 @@
       "weekly": "每周重复",
       "weekdays": "仅周一至周五",
       "monthly": "每月重复"
-    }
+    },
+    "setReminderFor": "为{{count}}个任务设置提醒",
+    "clearReminder": "清除提醒",
+    "tasksSelected": "已选择{{count}}个任务"
   },
   "menu": {
     "smartLists": "智能列表",
@@ -2343,7 +2346,11 @@
     "completed": "已完成",
     "completedToday": "今日完成",
     "completedYesterday": "昨日完成",
-    "older": "更早"
+    "older": "更早",
+    "notStarted": "未开始",
+    "inProgress": "进行中",
+    "almostDone": "即将完成",
+    "tasks": "任务"
   },
   "filters": {
     "hasDate": "有截止日期",

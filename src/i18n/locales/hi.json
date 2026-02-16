@@ -1687,7 +1687,10 @@
       "weekly": "हर सप्ताह दोहराता है",
       "weekdays": "केवल सोम-शुक्र",
       "monthly": "हर महीने दोहराता है"
-    }
+    },
+    "setReminderFor": "{{count}} कार्यों के लिए रिमाइंडर सेट करें",
+    "clearReminder": "रिमाइंडर हटाएं",
+    "tasksSelected": "{{count}} कार्य चुने गए"
   },
   "menu": {
     "smartLists": "स्मार्ट सूचियाँ",
@@ -2433,7 +2436,11 @@
     "completed": "पूर्ण",
     "completedToday": "आज पूर्ण",
     "completedYesterday": "कल पूर्ण",
-    "older": "पुराने"
+    "older": "पुराने",
+    "notStarted": "शुरू नहीं हुआ",
+    "inProgress": "प्रगति में",
+    "almostDone": "लगभग पूर्ण",
+    "tasks": "कार्य"
   },
   "filters": {
     "hasDate": "नियत तारीख है",

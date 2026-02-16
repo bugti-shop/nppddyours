@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Bell } from 'lucide-react';
 import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
+import { useTranslation } from 'react-i18next';
 
 interface BulkReminderSheetProps {
   isOpen: boolean;
@@ -13,6 +14,7 @@ interface BulkReminderSheetProps {
 }
 
 export const BulkReminderSheet = ({ isOpen, onClose, selectedCount, onSetReminder }: BulkReminderSheetProps) => {
+  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
   useHardwareBackButton({
@@ -37,7 +39,7 @@ export const BulkReminderSheet = ({ isOpen, onClose, selectedCount, onSetReminde
         <SheetHeader className="flex-shrink-0">
           <SheetTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />
-            Set Reminder for {selectedCount} task(s)
+            {t('bulk.setReminderFor', { count: selectedCount })}
           </SheetTitle>
         </SheetHeader>
 
@@ -52,10 +54,10 @@ export const BulkReminderSheet = ({ isOpen, onClose, selectedCount, onSetReminde
 
         <div className="flex gap-2 pt-4 flex-shrink-0 border-t">
           <Button variant="outline" onClick={handleClear} className="flex-1">
-            Clear Reminder
+            {t('bulk.clearReminder')}
           </Button>
           <Button onClick={handleApply} className="flex-1">
-            Apply
+            {t('bulk.apply')}
           </Button>
         </div>
       </SheetContent>
