@@ -797,7 +797,10 @@
     "addNew": "新規追加",
     "addTask": "タスクを追加",
     "allDay": "終日",
-    "searchTasks": "タスクを検索"
+    "searchTasks": "タスクを検索",
+    "noNotes": "今日のメモはありません。",
+    "clickToCreate": "\"+\"をクリックしてメモを作成してください。",
+    "clickToCreateTasks": "\"+\"をクリックしてタスクを作成してください。"
   },
   "events": {
     "editEvent": "イベントを編集",

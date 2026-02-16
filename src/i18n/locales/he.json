@@ -797,7 +797,10 @@
     "addNew": "הוסף חדש",
     "addTask": "הוסף משימה",
     "allDay": "כל היום",
-    "searchTasks": "חפש משימות"
+    "searchTasks": "חפש משימות",
+    "noNotes": "אין הערות להיום.",
+    "clickToCreate": "לחץ על \"+\" כדי ליצור הערות.",
+    "clickToCreateTasks": "לחץ על \"+\" כדי ליצור משימות."
   },
   "events": {
     "editEvent": "ערוך אירוע",

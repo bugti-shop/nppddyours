@@ -2392,7 +2392,10 @@
     "addEvent": "Adicionar Evento",
     "events": "Eventos",
     "allDay": "Dia Inteiro",
-    "searchTasks": "Buscar tarefas"
+    "searchTasks": "Buscar tarefas",
+    "noNotes": "Sem notas para o dia.",
+    "clickToCreate": "Clique em \"+\" para criar suas notas.",
+    "clickToCreateTasks": "Clique em \"+\" para criar suas tarefas."
   },
   "smartLists": {
     "allTasks": "Todas as Tarefas",

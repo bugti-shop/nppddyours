@@ -2458,7 +2458,10 @@
     "addEvent": "إضافة حدث",
     "events": "الأحداث",
     "allDay": "طوال اليوم",
-    "searchTasks": "بحث في المهام"
+    "searchTasks": "بحث في المهام",
+    "noNotes": "لا توجد ملاحظات لهذا اليوم.",
+    "clickToCreate": "انقر على \"+\" لإنشاء ملاحظاتك.",
+    "clickToCreateTasks": "انقر على \"+\" لإنشاء مهامك."
   },
   "smartLists": {
     "allTasks": "جميع المهام",

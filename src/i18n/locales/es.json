@@ -801,7 +801,10 @@
     "addNew": "Agregar Nuevo",
     "addTask": "Agregar Tarea",
     "allDay": "Todo el Día",
-    "searchTasks": "Buscar tareas"
+    "searchTasks": "Buscar tareas",
+    "noNotes": "Sin notas para el día.",
+    "clickToCreate": "Haz clic en \"+\" para crear tus notas.",
+    "clickToCreateTasks": "Haz clic en \"+\" para crear tus tareas."
   },
   "events": {
     "editEvent": "Editar Evento",

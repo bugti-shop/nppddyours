@@ -739,6 +739,7 @@
     "weekNumber": "Week #",
     "noNotes": "No notes for the day.",
     "clickToCreate": "Click \"+\" to create your notes.",
+    "clickToCreateTasks": "Click \"+\" to create your tasks.",
     "goToToday": "Go to Today",
     "changeBackground": "Change Background",
     "sun": "Sun",

@@ -1862,7 +1862,10 @@
     "addEvent": "تقریب شامل کریں",
     "events": "تقریبات",
     "allDay": "پورا دن",
-    "searchTasks": "کام تلاش کریں"
+    "searchTasks": "کام تلاش کریں",
+    "noNotes": "آج کے لیے کوئی نوٹ نہیں۔",
+    "clickToCreate": "اپنے نوٹس بنانے کے لیے \"+\" پر کلک کریں۔",
+    "clickToCreateTasks": "اپنے کام بنانے کے لیے \"+\" پر کلک کریں۔"
   },
   "smartLists": {
     "allTasks": "تمام کام",

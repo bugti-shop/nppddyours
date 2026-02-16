@@ -2392,7 +2392,10 @@
     "addEvent": "इवेंट जोड़ें",
     "events": "इवेंट्स",
     "allDay": "पूरे दिन",
-    "searchTasks": "कार्य खोजें"
+    "searchTasks": "कार्य खोजें",
+    "noNotes": "आज के लिए कोई नोट नहीं।",
+    "clickToCreate": "अपने नोट्स बनाने के लिए \"+\" पर क्लिक करें।",
+    "clickToCreateTasks": "अपने कार्य बनाने के लिए \"+\" पर क्लिक करें।"
   },
   "smartLists": {
     "allTasks": "सभी कार्य",
