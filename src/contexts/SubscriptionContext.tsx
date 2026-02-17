@@ -22,8 +22,8 @@ const ENTITLEMENT_ID = 'npd Pro';
 
 // Product identifiers
 const PRODUCT_IDS = {
-  weekly: 'npd_wk',
-  monthly: 'monthly',
+  weekly: 'npd_wk:npd-wk-plan',
+  monthly: 'npd_mo:npd-mo',
   lifetime: 'npd_lv',
 } as const;
 
