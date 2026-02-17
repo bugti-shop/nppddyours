@@ -45,15 +45,15 @@ export const PremiumPaywall = () => {
           productId: p.product.identifier,
         })));
 
-        // Match by product identifier first (most reliable), then by package type, then by identifier
-        const productIdMap: Record<string, string> = {
-          weekly: 'npd_wk',
-          monthly: 'monthly', 
-          lifetime: 'npd_lv',
+        // Match by product identifier (includes base plan for subscriptions)
+        const productIds: Record<string, string[]> = {
+          weekly: ['npd_wk:npd-wk-plan', 'npd_wk'],
+          monthly: ['npd_mo:npd-mo', 'npd_mo', 'monthly'],
+          lifetime: ['npd_lv'],
         };
         
-        const targetProductId = productIdMap[plan];
-        let pkg = offerings.current.availablePackages.find(p => p.product.identifier === targetProductId);
+        const targetIds = productIds[plan] || [];
+        let pkg = offerings.current.availablePackages.find(p => targetIds.includes(p.product.identifier));
         
         if (!pkg) {
           const packageType = plan === 'monthly' 

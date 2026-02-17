@@ -8,12 +8,12 @@ export const ENTITLEMENT_ID = 'npd Pro';
 // Product identifiers - matches RevenueCat dashboard and store products
 export const BILLING_CONFIG = {
   weekly: {
-    productId: 'npd_wk',
+    productId: 'npd_wk:npd-wk-plan',
     basePlanId: 'npd-wk-plan',
     offerId: 'npd-wk-trial',
   },
   monthly: {
-    productId: 'monthly',
+    productId: 'npd_mo:npd-mo',
     basePlanId: 'npd-mo',
     offerId: 'npd-monthly-offer',
   },
