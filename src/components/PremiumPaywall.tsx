@@ -9,7 +9,7 @@ import { useHardwareBackButton } from '@/hooks/useHardwareBackButton';
 
 export const PremiumPaywall = () => {
   const { t } = useTranslation();
-  const { showPaywall, closePaywall, unlockPro } = useSubscription();
+  const { showPaywall, closePaywall, unlockPro, purchase } = useSubscription();
   const [plan, setPlan] = useState<'weekly' | 'monthly' | 'lifetime'>('weekly');
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
@@ -33,45 +33,11 @@ export const PremiumPaywall = () => {
     setIsPurchasing(true);
     try {
       if (Capacitor.isNativePlatform()) {
-        const { Purchases, PACKAGE_TYPE } = await import('@revenuecat/purchases-capacitor');
-        const offerings = await Purchases.getOfferings();
-        
-        if (!offerings?.current) throw new Error('No offerings available');
-        
-        // Log available packages for debugging
-        console.log('Available packages:', offerings.current.availablePackages.map(p => ({
-          id: p.identifier,
-          type: p.packageType,
-          productId: p.product.identifier,
-        })));
-
-        // Match by product identifier (includes base plan for subscriptions)
-        const productIds: Record<string, string[]> = {
-          weekly: ['npd_wk:npd-wk-plan', 'npd_wk'],
-          monthly: ['npd_mo:npd-mo', 'npd_mo', 'monthly'],
-          lifetime: ['npd_lv'],
-        };
-        
-        const targetIds = productIds[plan] || [];
-        let pkg = offerings.current.availablePackages.find(p => targetIds.includes(p.product.identifier));
-        
-        if (!pkg) {
-          const packageType = plan === 'monthly' 
-            ? PACKAGE_TYPE.MONTHLY 
-            : plan === 'weekly' 
-              ? PACKAGE_TYPE.WEEKLY 
-              : PACKAGE_TYPE.LIFETIME;
-          pkg = offerings.current.availablePackages.find(p => p.packageType === packageType);
-        }
-        
-        if (!pkg) pkg = offerings.current.availablePackages.find(p => p.identifier === `$rc_${plan}`);
-        if (!pkg) throw new Error('Package not found');
-        
-        const result = await Purchases.purchasePackage({ aPackage: pkg });
-        const hasEntitlement = result.customerInfo.entitlements.active['npd Pro'] !== undefined;
-        
-        if (hasEntitlement) {
-          await unlockPro();
+        const success = await purchase(plan);
+        if (success) {
+          closePaywall();
+        } else {
+          // purchase() returns false on cancel or failure
         }
       } else {
         // Web fallback
