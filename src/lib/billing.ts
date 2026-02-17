@@ -10,17 +10,14 @@ export const BILLING_CONFIG = {
   weekly: {
     productId: 'npd_wk:npd-wk-plan',
     basePlanId: 'npd-wk-plan',
-    offerId: 'npd-wk-trial',
   },
   monthly: {
     productId: 'npd_mo:npd-mo',
     basePlanId: 'npd-mo',
-    offerId: 'npd-monthly-offer',
   },
   lifetime: {
     productId: 'npd_lv',
     basePlanId: 'npd-lv',
-    offerId: '',
   },
 } as const;
 
@@ -29,7 +26,6 @@ export type PlanType = keyof typeof BILLING_CONFIG;
 export interface SubscriptionProduct {
   productId: string;
   basePlanId: string;
-  offerId: string;
 }
 
 export const getSubscriptionDetails = (plan: PlanType): SubscriptionProduct => {
