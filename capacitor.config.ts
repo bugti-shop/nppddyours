@@ -7,7 +7,13 @@ const config: CapacitorConfig = {
   server: {
     cleartext: true
   },
-  plugins: {},
+  plugins: {
+    SocialLogin: {
+      google: {
+        webClientId: '52777395492-vnlk2hkr3pv15dtpgp2m51p7418vll90.apps.googleusercontent.com',
+      },
+    },
+  },
   android: {
     allowMixedContent: true,
     webContentsDebuggingEnabled: true,
