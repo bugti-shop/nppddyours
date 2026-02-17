@@ -258,9 +258,11 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
       else if (productType === 'monthly') packageType = PACKAGE_TYPE.MONTHLY;
       else packageType = PACKAGE_TYPE.LIFETIME;
 
+      // Try matching by package type first, then by product identifier, then by RC identifier
       const pkg = currentOfferings.current.availablePackages.find(p => p.packageType === packageType)
-        || currentOfferings.current.availablePackages.find(p => p.identifier === PRODUCT_IDS[productType]);
-
+        || currentOfferings.current.availablePackages.find(p => p.product.identifier === PRODUCT_IDS[productType])
+        || currentOfferings.current.availablePackages.find(p => p.identifier === PRODUCT_IDS[productType])
+        || currentOfferings.current.availablePackages.find(p => p.identifier === `$rc_${productType}`);
       if (!pkg) throw new Error(`Package not found for ${productType}`);
       return await purchasePackage(pkg);
     } catch (err) {
@@ -422,7 +424,6 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     if (productId === PRODUCT_IDS.weekly || productId.includes('wk')) return 'weekly';
     if (productId === PRODUCT_IDS.monthly || productId.includes('month')) return 'monthly';
     if (productId === PRODUCT_IDS.lifetime || productId.includes('lv') || productId.includes('lifetime')) return 'lifetime';
-    return 'none';
     return 'none';
   }, [isPro, customerInfo, localProAccess]);
 
