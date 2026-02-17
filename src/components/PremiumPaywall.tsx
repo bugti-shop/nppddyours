@@ -38,14 +38,33 @@ export const PremiumPaywall = () => {
         
         if (!offerings?.current) throw new Error('No offerings available');
         
-        const packageType = plan === 'monthly' 
-          ? PACKAGE_TYPE.MONTHLY 
-          : plan === 'weekly' 
-            ? PACKAGE_TYPE.WEEKLY 
-            : PACKAGE_TYPE.LIFETIME;
+        // Log available packages for debugging
+        console.log('Available packages:', offerings.current.availablePackages.map(p => ({
+          id: p.identifier,
+          type: p.packageType,
+          productId: p.product.identifier,
+        })));
+
+        // Match by product identifier first (most reliable), then by package type, then by identifier
+        const productIdMap: Record<string, string> = {
+          weekly: 'npd_wk',
+          monthly: 'monthly', 
+          lifetime: 'npd_lv',
+        };
         
-        let pkg = offerings.current.availablePackages.find(p => p.packageType === packageType);
-        if (!pkg) pkg = offerings.current.availablePackages.find(p => p.identifier === plan);
+        const targetProductId = productIdMap[plan];
+        let pkg = offerings.current.availablePackages.find(p => p.product.identifier === targetProductId);
+        
+        if (!pkg) {
+          const packageType = plan === 'monthly' 
+            ? PACKAGE_TYPE.MONTHLY 
+            : plan === 'weekly' 
+              ? PACKAGE_TYPE.WEEKLY 
+              : PACKAGE_TYPE.LIFETIME;
+          pkg = offerings.current.availablePackages.find(p => p.packageType === packageType);
+        }
+        
+        if (!pkg) pkg = offerings.current.availablePackages.find(p => p.identifier === `$rc_${plan}`);
         if (!pkg) throw new Error('Package not found');
         
         const result = await Purchases.purchasePackage({ aPackage: pkg });
